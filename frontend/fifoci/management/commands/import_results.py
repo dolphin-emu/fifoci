@@ -1,0 +1,105 @@
+from django.conf import settings
+from django.core.management.base import BaseCommand, CommandError
+from fifoci.models import FifoTest, Result, Version
+
+import json
+import os.path
+import shutil
+import subprocess
+import zipfile
+
+
+def find_first_parent(parents):
+    """Takes a sorted list of parents of a revision and returns the first
+    existing one.
+    """
+    versions = Version.objects.filter(hash__in=parents)
+    existing = {v.hash: v for v in versions}
+    for parent_hash in parents:
+        if parent_hash in existing:
+            return existing[parent_hash], parent_hash
+    return None, parents[0]
+
+
+def get_or_create_ver(rev):
+    """Tries to either get an existing Version object for a given revision, or
+    creates a new one and fills up all the required information.
+    """
+    try:
+        return Version.objects.get(hash=rev['hash'])
+    except Version.DoesNotExist:
+        obj = Version()
+        obj.hash = rev['hash']
+        obj.name = rev['name']
+        obj.submitted = True  # TODO
+
+        parent, parent_hash = find_first_parent(rev['parents'])
+        obj.parent = parent
+        obj.parent_hash = parent_hash
+
+        obj.save()
+        return obj
+
+
+def import_result(type, ver, zf, dff_short_name, result):
+    """Imports a result to the database. Also exports the image files to
+    MEDIA_ROOT.
+    """
+    try:
+        dff = FifoTest.objects.get(shortname=dff_short_name)
+    except FifoTest.DoesNotExist:
+        print('DFF %r does not exist, skipping.' % dff_short_name)
+        return
+
+    try:
+        r = Result.objects.get(dff=dff, ver=ver, type=type)
+    except Result.DoesNotExist:
+        r = Result()
+        r.dff = dff
+        r.ver = ver
+        r.type = type
+
+    if result['failure']:
+        r.hashes = ''
+    else:
+        r.hashes = ','.join(result['hashes'])
+
+    base_path = os.path.join(settings.MEDIA_ROOT, 'results')
+    pngcrush = shutil.which('pngcrush') is not None
+    for hash in result['hashes']:
+        final_img_path = os.path.join(base_path, hash + '.png')
+        if os.path.exists(final_img_path):
+            continue
+
+        if pngcrush:
+            extracted_img_path = final_img_path + '.unopt'
+        else:
+            extracted_img_path = final_img_path
+        zip_path = 'fifoci-result/%s.png' % hash
+        open(extracted_img_path, 'wb').write(zf.read(zip_path))
+        if pngcrush:
+            if subprocess.call(['pngcrush', extracted_img_path,
+                                            final_img_path]) == 0:
+                os.unlink(extracted_img_path)
+            else:
+                os.rename(extracted_img_path, final_img_path)
+
+    r.save()
+
+
+class Command(BaseCommand):
+    args = '<zip_file zip_files...>'
+    help = 'Imports some result zip files into the database.'
+
+    def handle(self, *args, **options):
+        for zip_file in args:
+            if not os.path.exists(zip_file):
+                raise CommandError('%r does not exist' % zip_file)
+            with zipfile.ZipFile(zip_file) as zf:
+                meta = zf.read('fifoci-result/meta.json').decode('utf-8')
+                meta = json.loads(meta)
+
+                ver = get_or_create_ver(meta['rev'])
+                for dff_short_name, result in meta['results'].items():
+                    import_result(meta['type'], ver, zf, dff_short_name,
+                                  result)
