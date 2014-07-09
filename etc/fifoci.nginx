@@ -1,0 +1,20 @@
+server {
+    listen 443 ssl;
+    server_name fifoci.dolphin-emu.org fifoci.dolphin-emu.net;
+
+    access_log logs/fifoci.access.log main;
+
+    location / {
+        proxy_pass http://localhost:8041;
+    }
+
+    location /media {
+        alias /srv/fifoci/media;
+        expires 30d;
+    }
+
+    location /static {
+        alias /srv/fifoci/static;
+        expires 30d;
+    }
+}
