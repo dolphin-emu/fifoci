@@ -83,6 +83,7 @@ def import_result(type, ver, zf, dff_short_name, result):
                 os.unlink(extracted_img_path)
             else:
                 os.rename(extracted_img_path, final_img_path)
+        os.chmod(final_img_path, 0644)
 
     r.save()
 
