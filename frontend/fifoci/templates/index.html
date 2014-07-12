@@ -1,0 +1,58 @@
+{% extends "_base.html" %}
+
+{% block "fullheadtitle" %}FifoCI - GPU regression testing for Dolphin{% endblock %}
+{% block "title" %}Recent GPU regression test results{% endblock %}
+
+{% block "content" %}
+  <ul class="nav nav-tabs">
+  {% for type, _ in recent_results %}
+    <li><a href="#{{ type|slugify }}">{{ type }}</a></li>
+  {% endfor %}
+  </ul>
+
+  {% for type, versions in recent_results %}
+  <a name="{{ type|slugify }}"></a><h2>Differences for <tt>{{ type }}</tt></h2>
+  <div class="result-table-container well well-lg">
+    <table class="result-table">
+      <thead>
+        <tr>
+          <th>Test</th>
+          <th>4.0-1234</th>
+          <th>4.0-1111</th>
+          <th>4.0-1000</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>sample-fifolog-1</th>
+          <td>?</td>
+          <td>?</td>
+          <td>?</td>
+        </tr>
+        <tr>
+          <th>sample-fifolog-2</th>
+          <td>?</td>
+          <td>?</td>
+          <td>?</td>
+        </tr>
+        <tr>
+          <th>sample-fifolog-3</th>
+          <td>?</td>
+          <td>?</td>
+          <td>?</td>
+        </tr>
+        <tr>
+          <th>sample-fifolog-4</th>
+          <td>?</td>
+          <td>?</td>
+          <td>?</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% empty %}
+  <p>No results found! Try again later.</p>
+  {% endfor %}
+{% endblock %}
+
+<!-- vim: set ft=htmldjango ts=2 sw=2 et tw=160 : -->

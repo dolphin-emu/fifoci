@@ -26,7 +26,7 @@ def get_or_create_ver(rev):
     creates a new one and fills up all the required information.
     """
     try:
-        return Version.objects.get(hash=rev['hash'])
+        obj = Version.objects.get(hash=rev['hash'])
     except Version.DoesNotExist:
         obj = Version()
         obj.hash = rev['hash']
@@ -38,10 +38,10 @@ def get_or_create_ver(rev):
         obj.parent_hash = parent_hash
 
         obj.save()
-        return obj
+    return obj, obj.parent
 
 
-def import_result(type, ver, zf, dff_short_name, result):
+def import_result(type, ver, parent, zf, dff_short_name, result):
     """Imports a result to the database. Also exports the image files to
     MEDIA_ROOT.
     """
@@ -63,6 +63,12 @@ def import_result(type, ver, zf, dff_short_name, result):
         r.hashes = ''
     else:
         r.hashes = ','.join(result['hashes'])
+
+    try:
+        old_r = Result.objects.get(dff=dff, ver=parent, type=type)
+        r.has_change = old_r.hashes != r.hashes
+    except Result.DoesNotExist:
+        r.has_change = True
 
     base_path = os.path.join(settings.MEDIA_ROOT, 'results')
     pngcrush = shutil.which('pngcrush') is not None
@@ -100,7 +106,7 @@ class Command(BaseCommand):
                 meta = zf.read('fifoci-result/meta.json').decode('utf-8')
                 meta = json.loads(meta)
 
-                ver = get_or_create_ver(meta['rev'])
+                ver, parent = get_or_create_ver(meta['rev'])
                 for dff_short_name, result in meta['results'].items():
-                    import_result(meta['type'], ver, zf, dff_short_name,
-                                  result)
+                    import_result(meta['type'], ver, parent, zf,
+                                  dff_short_name, result)

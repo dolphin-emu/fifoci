@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+{% load static from staticfiles %}
+
+<html>
+  <head>
+  <title>{% block "fullheadtitle" %}{% block "headtitle" %}ChangeMe{% endblock %} - FifoCI{% endblock %}</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static "css/bootstrap-sidebar.css" %}">
+    <link rel="stylesheet" href="{% static "css/fifoci.css" %}">
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <!-- Sidebar -->
+      <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+          <li class="sidebar-brand"><a href="/">FifoCI</a></li>
+          <li>
+            <a href="/">Recent changes</a>
+            <ul>
+              <li><a href="#">Test 1</a></li>
+              <li><a href="#">Test 2</a></li>
+              <li><a href="#">Test 3</a></li>
+              <li><a href="#">Test 4</a></li>
+              <li><a href="#">Test 5</a></li>
+            </ul>
+          </li>
+          <li><a href="#">About</a>
+          <li><a href="https://github.com/dolphin-emu/dolphin/">Dolphin GitHub</a></li>
+          <li><a href="https://github.com/dolphin-emu/fifoci/">Source code</a></li>
+        </ul>
+      </div>
+
+      <!-- Main contents -->
+      <div id="page-content-wrapper">
+        <div class="content-header">
+          <a id="menu-toggle" href="#" class="btn btn-default"><i class="fa fa-bars"></i></a>
+          <h1>{% block "title" %}Page title here{% endblock %}</h1>
+        </div>
+      </div>
+
+      <div class="page-content inset">
+        {% block "content" %}
+        <p>Content!</p>
+        {% endblock %}
+      </div>
+    </div>
+
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("active");
+    });
+    </script>
+  </body>
+</html>
+
+<!-- vim: set ft=htmldjango ts=2 sw=2 et tw=160 : -->

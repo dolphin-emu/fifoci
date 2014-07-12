@@ -1,0 +1,25 @@
+/* Sidebar recent changes sublist */
+.sidebar-nav li ul {
+    list-style: none;
+}
+.sidebar-nav li ul li {
+    text-indent: 10px;
+    line-height: 25px;
+}
+
+/* Homepage recent changes table */
+table.result-table thead th {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+table.result-table tbody td {
+    text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+table.result-table tbody th {
+    padding-right: 10px;
+}
+div.result-table-container {
+    margin-bottom: 2.5em;
+}

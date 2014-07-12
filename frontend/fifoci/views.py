@@ -1,12 +1,23 @@
-from django.contrib.staticfiles.views import serve as static_serve
 from django.http import JsonResponse
+from django.shortcuts import render
 from fifoci.models import FifoTest, Result
 
 import os.path
 
 
 def home(request):
-    return static_serve(request, '/index.html')
+    # TODO(delroth): This is fake data for testing.
+    data = {
+        'recent_results': [
+            ('linux-opengl', [
+            ]),
+            ('linux-software', [
+            ]),
+            ('windows-d3d', [
+            ]),
+        ],
+    }
+    return render(request, 'index.html', dictionary=data)
 
 
 def dffs_to_test(request):
@@ -17,22 +28,4 @@ def dffs_to_test(request):
         filename = os.path.basename(url)
         out.append({'shortname': dff.shortname, 'filename': filename,
                     'url': url})
-    return JsonResponse(out, safe=False)
-
-
-def results_for_version(request, hash):
-    results = Result.objects.filter(ver__hash=hash).select_related('dff')
-    out = []
-    for r in results:
-        out.append({
-            'type': r.type,
-            'dff': {
-                'name': r.dff.name,
-                'filename': r.dff.filename,
-                'shortname': r.dff.shortname,
-                'active': r.dff.active,
-                'description': r.dff.description,
-            },
-            'hashes': r.hashes.split(','),
-        })
     return JsonResponse(out, safe=False)

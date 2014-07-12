@@ -27,7 +27,8 @@ class Version(models.Model):
 class Result(models.Model):
     dff = models.ForeignKey(FifoTest)
     ver = models.ForeignKey(Version)
-    type = models.CharField(max_length=64)
+    type = models.CharField(max_length=64, db_index=True)
+    has_change = models.BooleanField(default=False, db_index=True)
 
     # Format: "h1,h2,h3,...,hN"
     hashes = models.TextField()
