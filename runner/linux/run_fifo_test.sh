@@ -1,11 +1,17 @@
 #! /bin/bash
 
-BASE=$(dirname $0)
-TIMEOUT=2m
-
 if [ "$#" -lt 2 ]; then
     echo >&2 "usage: $0 <dolphin-emu> <file.dff:out-dir ...>"
     exit 1
+fi
+
+BASE=$(dirname $0)
+TIMEOUT=2m
+
+if [ -z "$FIFOCI_NO_TIMEOUT" ]; then
+    TIMEOUT_CMD="timeout -s 9 $TIMEOUT"
+else
+    TIMEOUT_CMD=""
 fi
 
 show_logs() {
@@ -47,7 +53,7 @@ while [ "$#" -ne 0 ]; do
 
     echo "Starting DolphinNoGui with a $TIMEOUT timeout"
 
-    timeout -s 9 $TIMEOUT $DOLPHIN -e $DFF &> >(show_logs Dolphin)
+    $TIMEOUT_CMD $DOLPHIN -e $DFF &> >(show_logs Dolphin)
     if [ "$?" -ne 0 ]; then
         echo "FIFO log playback failed for $DFF"
         touch $OUT/failure
