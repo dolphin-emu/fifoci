@@ -4,6 +4,10 @@ server {
 
     access_log logs/fifoci.access.log main;
 
+    # FifoCI admins need to upload large DFF files, up to 100MB. Put a
+    # deliberately high limit here.
+    client_max_body_size 256M;
+
     location / {
         proxy_pass http://localhost:8041;
     }
