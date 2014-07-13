@@ -78,17 +78,17 @@ def dff_view(request, name):
 def version_view(request, hash):
     ver = get_object_or_404(Version, hash=hash)
     results = Result.objects.filter(ver=ver).order_by('type', 'dff__shortname')
-    colspan = []
+    rowspan = []
     i = 0
     while i < len(results):
         type = results[i].type
         count = 1
         while i + count < len(results) and results[i + count].type == type:
             count += 1
-        colspan += [count] + [0] * (count - 1)
+        rowspan += [count] + [0] * (count - 1)
         i += count
     data = {'ver': ver,
-            'results': zip(results, colspan)}
+            'results': zip(results, rowspan)}
     return render(request, 'version-view.html', dictionary=data)
 
 
