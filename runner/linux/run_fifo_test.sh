@@ -1,5 +1,9 @@
 #! /bin/bash
 
+# This file is part of the FifoCI project.
+# Copyright (c) 2014 Pierre Bourdon <delroth@dolphin-emu.org>
+# Licensing information: see $REPO_ROOT/LICENSE
+
 if [ "$#" -lt 2 ]; then
     echo >&2 "usage: $0 <dolphin-emu> <file.dff:out-dir ...>"
     exit 1

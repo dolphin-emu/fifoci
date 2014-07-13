@@ -1,3 +1,7 @@
+# This file is part of the FifoCI project.
+# Copyright (c) 2014 Pierre Bourdon <delroth@dolphin-emu.org>
+# Licensing information: see $REPO_ROOT/LICENSE
+
 from django.conf import settings
 from django.conf.urls import patterns, include, static, url
 from django.contrib import admin

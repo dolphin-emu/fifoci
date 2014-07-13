@@ -1,5 +1,9 @@
 #! /usr/bin/env python
 
+# This file is part of the FifoCI project.
+# Copyright (c) 2014 Pierre Bourdon <delroth@dolphin-emu.org>
+# Licensing information: see $REPO_ROOT/LICENSE
+
 # Runs a system specific script to generate frame dumps, and exports the test
 # results to a Zip file that can then be imported back by the central system.
 #
