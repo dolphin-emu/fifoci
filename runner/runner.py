@@ -111,7 +111,7 @@ def spawn_tests(args, targets):
 
     if system == 'lin':
         target_descr = ' '.join(':'.join(target[1:]) for target in targets)
-        ret = os.system('%s/linux/run_fifo_test.sh %s %s %s'
+        ret = os.system('%s/linux/run_fifo_test.sh %s %s %s %s'
                         % (base_path, backend, driver, args.dolphin,
                            target_descr))
     else:
