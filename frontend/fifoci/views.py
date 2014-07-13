@@ -25,6 +25,10 @@ def _get_recent_results(n, res_per_vers, **cond):
         if res.ver not in versions_set:
             versions.append(res.ver)
             versions_set.add(res.ver)
+
+    recent_results = (Result.objects.select_related('ver')
+                                    .filter(ver__in=versions, **cond)
+                                    .order_by('-ver__ts'))
     return versions[:n], recent_results
 
 
