@@ -107,12 +107,16 @@ def spawn_tests(args, targets):
     to a given path.
     """
     base_path = os.path.dirname(__file__)
-    system, backend = args.type.split('-', 1)
+    backend, system, driver = args.type.split('-', 2)
 
-    if system == 'linux':
+    if system == 'lin':
         target_descr = ' '.join(':'.join(target[1:]) for target in targets)
         ret = os.system('%s/linux/run_fifo_test.sh %s %s %s'
-                        % (base_path, backend, args.dolphin, target_descr))
+                        % (base_path, backend, driver, args.dolphin,
+                           target_descr))
+    else:
+        raise RuntimeError('unsupported system: %r' % system)
+
     if ret:
         raise RuntimeError('run_fifo_test.sh returned %d' % ret)
 

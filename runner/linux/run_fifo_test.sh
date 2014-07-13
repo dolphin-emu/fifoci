@@ -23,6 +23,7 @@ show_logs() {
 }
 
 BACKEND=$1; shift
+DRIVER=$1; shift
 DOLPHIN=$1; shift
 
 echo "FIFOCI Worker starting for $DOLPHIN"
@@ -32,8 +33,13 @@ echo "FIFOCI Worker starting for $DOLPHIN"
 export DISPLAYNUM=1
 export DISPLAY=:$DISPLAYNUM
 echo "Starting a headless Xorg server on $DISPLAY"
+if [ -f "$HOME/fifoci-xorg.conf" ]; then
+    XORG_CFG="$HOME/fifoci-xorg.conf"
+else
+    XORG_CFG="$BASE/xorg.conf"
+fi
 sudo Xorg -noreset +extension GLX +extension RANDR +extension RENDER \
-    -config $BASE/xorg.conf $DISPLAY &> >(show_logs Xorg) &
+    -config $XORG_CFG $DISPLAY &> >(show_logs Xorg) &
 XORG_PID=$!
 
 while ! [ -e "/tmp/.X11-unix/X$DISPLAYNUM" ]; do
