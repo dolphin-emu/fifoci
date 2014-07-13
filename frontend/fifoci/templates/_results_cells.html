@@ -2,6 +2,8 @@
   <td class="{% if res.hashes %}success{% elif res %}failure{% else %}missing{% endif %}">
     {% if res and prev and res.hashes != prev.hashes %}
     <a href="{% url 'compare-view' res.id prev.id %}"><i class="fa fa-search"></i></a>
+    {% elif res and not prev %}
+    <a href="{{ res.get_absolute_url }}"><i class="fa fa-search"></i></a>
     {% endif %}
   </td>
 {% endfor %}
