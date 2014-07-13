@@ -85,7 +85,7 @@ def version_view(request, hash):
         count = 1
         while i + count < len(results) and results[i + count].type == type:
             count += 1
-        colspan += [count] + [0] * count
+        colspan += [count] + [0] * (count - 1)
         i += count
     data = {'ver': ver,
             'results': zip(results, colspan)}
