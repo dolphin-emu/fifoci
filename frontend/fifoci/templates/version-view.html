@@ -39,7 +39,13 @@
         {% endif %}
         <td><a href="{{ res.dff.get_absolute_url }}">{{ res.dff.shortname }}</a></td>
         <td>{% if res.has_change %}<strong>DIFF</strong>{% endif %}</td>
-        <td>{% if res.hashes %}Rendered{% else %}Failure{% endif %}</td>
+        <td>
+          {% if res.hashes %}
+          <a href="{{ res.get_absolute_url }}">Rendered</a>
+          {% else %}
+          Failure
+          {% endif %}
+        </td>
       </tr>
       {% endfor %}
     </tbody>

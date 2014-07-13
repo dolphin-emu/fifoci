@@ -79,6 +79,11 @@ def version_view(request, hash):
     return render(request, 'version-view.html', dictionary=data)
 
 
+def result_view(request, id):
+    res = get_object_or_404(Result, pk=id)
+    return render(request, 'result-view.html', dictionary={'result': res})
+
+
 def dffs_to_test(request):
     dffs = FifoTest.objects.filter(active=True)
     out = []

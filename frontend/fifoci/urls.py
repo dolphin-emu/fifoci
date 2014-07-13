@@ -10,6 +10,8 @@ urlpatterns = patterns('',
         name='dff-view'),
     url(r'version/(?P<hash>[0-9a-f]{40})/$', 'fifoci.views.version_view',
         name='version-view'),
+    url(r'result/(?P<id>\d+)/$', 'fifoci.views.result_view',
+        name='result-view'),
     url(r'^admin/', include(admin.site.urls)),
 )
 

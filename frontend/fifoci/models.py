@@ -41,5 +41,13 @@ class Result(models.Model):
     # Format: "h1,h2,h3,...,hN"
     hashes = models.TextField()
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('result-view', [self.id])
+
+    @property
+    def hashes_list(self):
+        return self.hashes.split(',')
+
     def __str__(self):
         return '%s / %s / %s' % (self.dff, self.ver, self.type)

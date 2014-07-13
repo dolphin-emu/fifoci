@@ -45,3 +45,23 @@ table.version-result-table tbody td {
     padding-left: 5px;
     padding-right: 5px;
 }
+
+/* Results view */
+div.result-image img {
+    max-width: 100%;
+    margin-bottom: 5px;
+}
+
+/* Same height containers */
+.container-xs-height {
+    display: table;
+    padding-left: 0;
+    padding-right: 0;
+}
+.row-xs-height {
+    display: table-row;
+}
+.col-xs-height {
+    display: table-cell;
+    float: none;
+}
