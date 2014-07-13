@@ -17,6 +17,7 @@ table.result-table tbody td {
     padding-left: 5px;
     padding-right: 5px;
     border: 1px solid black;
+    border-left: none;
 }
 table.result-table tbody th {
     text-align: right;
@@ -33,6 +34,12 @@ table.result-table tbody td.success {
 }
 table.result-table tbody td.missing {
     border: none;
+}
+table.result-table tbody td.same {
+    border-right: none;
+}
+table.result-table tbody td:nth-of-type(1) {
+    border-left: 1px solid black;
 }
 
 /* Version results table */
