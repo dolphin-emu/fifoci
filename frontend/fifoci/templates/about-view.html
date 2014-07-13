@@ -1,0 +1,34 @@
+{% extends "_base.html" %}
+
+{% block "headtitle" %}About{% endblock %}
+{% block "title" %}About FifoCI{% endblock %}
+
+{% block "content" %}
+<div class="col-md-6" style="text-align: justify">
+<p>FifoCI is a system used to continuously test Dolphin's GPU rendering code.
+Dolphin can record and replay data sent from the CPU to the GPU, allowing for
+isolated GPU testing without requiring a full game to be emulated. FifoCI uses
+this in conjunction with Dolphin's frame dumping feature. Each Dolphin version
+is tested by rendering a chosen set of FIFO logs, dumping the frames, and
+comparing the dumped pixels data to previous versions of the emulator. Changes
+in behavior are emphasized so that improvements and regressions are easily
+visible.</p>
+
+<p>The FifoCI homepage shows the most recent Dolphin versions that have at
+least one graphical rendering difference ("boring" versions are skipped and
+not shown). A red cell indicates that Dolphin could not render a given FIFO
+log, which usually means one of the features FifoCI relies on has been
+broken. A green cell indicates that the rendering was successful. If a link
+is present in the cell, it means a difference was found compared to the
+previous Dolphin version. Clicking that link will show the difference frame by
+frame.</p>
+
+<p>FifoCI can also be used to show all renderings for a given version, or
+results for one specific test. Click the links and experiment!</p>
+
+<p>Finally, this is an open source project, you can find us on GitHub by
+following the "Source code" link in the sidebar. Please contribute and report
+bugs.</p>
+</div>
+{% endblock %}
+<!-- vim: set ft=htmldjango ts=2 sw=2 et tw=160 : -->

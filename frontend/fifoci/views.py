@@ -94,6 +94,10 @@ def compare_view(request, curr_id, old_id):
     return render(request, 'compare-view.html', dictionary=data)
 
 
+def about_view(request):
+    return render(request, 'about-view.html')
+
+
 def dffs_to_test(request):
     dffs = FifoTest.objects.filter(active=True)
     out = []
