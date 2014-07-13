@@ -24,7 +24,7 @@ def home(request):
         versions_set = set()
         versions = []
         for res in recent_results:
-            if res.ver.hash not in versions_set:
+            if res.ver not in versions_set:
                 versions.append(res.ver)
                 versions_set.add(res.ver)
         versions = versions[:N_VERSIONS_TO_SHOW]
