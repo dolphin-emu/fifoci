@@ -52,6 +52,7 @@ table.results-diff thead th {
     padding-bottom: 1em;
 }
 table.results-diff tbody {
+    text-align: center;
     vertical-align: center;
 }
 table.results-diff .results-col-curr {

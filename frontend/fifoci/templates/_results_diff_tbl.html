@@ -12,17 +12,17 @@
     {% get_zipped_hashes current old as hashes_zip %}
     {% for curr_h, old_h in hashes_zip %}
       <tr>
-        <td class="result-image">
+        <td class="result-image">{% if curr_h %}
           <a href="{{ MEDIA_URL }}results/{{ curr_h }}.png">
             <img src="{{ MEDIA_URL }}results/{{ curr_h }}.png" alt="{{ curr_h }}">
           </a>
-        </td>
-        <td>{% if old_h %}Diff{% endif %}</td>
+          {% else %}<strong>Failure</strong>{% endif %}</td>
+        <td>{% if curr_h and old_h %}Diff TODO{% endif %}</td>
         <td class="result-image">{% if old_h %}
           <a href="{{ MEDIA_URL }}results/{{ old_h }}.png">
             <img src="{{ MEDIA_URL }}results/{{ old_h }}.png" alt="{{ old_h }}">
           </a>
-          {% endif %}</td>
+          {% else %}<strong>Failure</strong>{% endif %}</td>
       </tr>
     {% endfor %}
   </tbody>

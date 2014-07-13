@@ -36,8 +36,9 @@ def home(request):
             fifo_tests[res.dff][res.ver] = res
         fifo_tests_list = []
         for dff, test_results in fifo_tests.items():
-            fifo_tests_list.append(
-                    (dff, [test_results.get(v) for v in versions]))
+            results = [test_results.get(v) for v in versions]
+            results = zip(results, results[1:] + [None])
+            fifo_tests_list.append((dff, results))
         fifo_tests_list.sort(key=lambda k: k[0].shortname)
 
         data['recent_results'].append((type, versions, fifo_tests_list))
@@ -53,7 +54,9 @@ def dff_view(request, name):
         types[res.type][res.ver] = res
     types_list = []
     for type, test_results in types.items():
-        types_list.append((type, [test_results.get(v) for v in versions]))
+        results = [test_results.get(v) for v in versions]
+        results = zip(results, results[1:] + [None])
+        types_list.append((type, results))
     types_list.sort(key=lambda k: k[0])
 
     data = {'dff': dff,
@@ -82,6 +85,13 @@ def version_view(request, hash):
 def result_view(request, id):
     res = get_object_or_404(Result, pk=id)
     return render(request, 'result-view.html', dictionary={'result': res})
+
+
+def compare_view(request, curr_id, old_id):
+    current = get_object_or_404(Result, pk=curr_id)
+    old = get_object_or_404(Result, pk=old_id)
+    data = {'current': current, 'old': old}
+    return render(request, 'compare-view.html', dictionary=data)
 
 
 def dffs_to_test(request):

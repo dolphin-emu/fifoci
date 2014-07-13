@@ -12,6 +12,8 @@ urlpatterns = patterns('',
         name='version-view'),
     url(r'result/(?P<id>\d+)/$', 'fifoci.views.result_view',
         name='result-view'),
+    url(r'compare/(?P<curr_id>\d+)-(?P<old_id>\d+)/$',
+        'fifoci.views.compare_view', name='compare-view'),
     url(r'^admin/', include(admin.site.urls)),
 )
 

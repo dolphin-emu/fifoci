@@ -1,6 +1,8 @@
-{% for res in results %}
+{% for res, prev in results %}
   <td class="{% if res.hashes %}success{% elif res %}failure{% else %}missing{% endif %}">
-    {{ res.id }}
+    {% if prev %}
+    <a href="{% url 'compare-view' res.id prev.id %}"><i class="fa fa-search"></i></a>
+    {% endif %}
   </td>
 {% endfor %}
 <!-- vim: set ft=htmldjango ts=2 sw=2 et tw=160 : -->

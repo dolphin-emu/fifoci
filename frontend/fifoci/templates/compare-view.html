@@ -1,0 +1,15 @@
+{% extends "_base.html" %}
+
+{% block "headtitle" %}{{ current.ver.name }} vs. {{ old.ver.name }} / {{ current.type }} / {{ current.dff }}{% endblock %}
+{% block "title" %}
+<a href="{{ current.ver.get_absolute_url }}">{{ current.ver.name }}</a> vs.
+<a href="{{ old.ver.get_absolute_url }}">{{ old.ver.name }}</a> /
+<a href="/#{{ current.type }}">{{ current.type }}</a> /
+<a href="{{ current.dff.get_absolute_url }}">{{ current.dff }}</a>
+{% endblock %}
+
+{% block "content" %}
+{% include "_results_diff_tbl.html" with current=current old=old %}
+{% endblock %}
+
+<!-- vim: set ft=htmldjango ts=2 sw=2 et tw=160 : -->
