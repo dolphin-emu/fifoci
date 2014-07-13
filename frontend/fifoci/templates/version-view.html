@@ -33,7 +33,7 @@
     </thead>
     <tbody>
       {% for res, type_rowspan in results %}
-      <tr>
+      <tr class="{% if type_rowspan %}new-type{% endif %}">
         {% if type_rowspan %}
         <th rowspan="{{ type_rowspan }}"><a href="/#{{ res.type }}">{{ res.type }}</a></th>
         {% endif %}

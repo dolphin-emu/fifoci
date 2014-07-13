@@ -45,6 +45,9 @@ table.version-result-table tbody td {
     padding-left: 5px;
     padding-right: 5px;
 }
+table.version-result-table tbody tr.new-type {
+    border-top: 1px solid black;
+}
 
 /* Results view */
 table.results-diff thead th {
