@@ -19,6 +19,7 @@ table.result-table tbody td {
     border: 1px solid black;
 }
 table.result-table tbody th {
+    text-align: right;
     padding-right: 10px;
 }
 div.result-table-container {
