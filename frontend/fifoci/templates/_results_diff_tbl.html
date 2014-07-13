@@ -1,0 +1,31 @@
+{% load diff_utils %}
+
+<table class="results-diff">
+  <thead>
+    <tr>
+      <th class="results-col-curr"><a href="{{ current.ver.get_absolute_url }}">{{ current.ver }}</a></th>
+      <th class="results-col-diff">{% if old %}Diff{% endif %}</th>
+      <th class="results-col-old">{% if old %}<a href="{{ old.ver.get_absolute_url }}">{{ old.ver }}</a>{% endif %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% get_zipped_hashes current old as hashes_zip %}
+    {% for curr_h, old_h in hashes_zip %}
+      <tr>
+        <td class="result-image">
+          <a href="{{ MEDIA_URL }}results/{{ curr_h }}.png">
+            <img src="{{ MEDIA_URL }}results/{{ curr_h }}.png" alt="{{ curr_h }}">
+          </a>
+        </td>
+        <td>{% if old_h %}Diff{% endif %}</td>
+        <td class="result-image">{% if old_h %}
+          <a href="{{ MEDIA_URL }}results/{{ old_h }}.png">
+            <img src="{{ MEDIA_URL }}results/{{ old_h }}.png" alt="{{ old_h }}">
+          </a>
+          {% endif %}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- vim: set ft=htmldjango ts=2 sw=2 et tw=160 : -->

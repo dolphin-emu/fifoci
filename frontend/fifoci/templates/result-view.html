@@ -8,26 +8,15 @@
 {% endblock %}
 
 {% block "content" %}
-<div class="container-xs-height">
-  {% for h in result.hashes_list %}
-  <div class="row row-xs-height">
-    <div class="col-xs-4 col-xs-height">
-      <div class="result-image">
-        <a href="{{ MEDIA_URL }}results/{{ h }}.png">
-          <img src="{{ MEDIA_URL }}results/{{ h }}.png" alt="{{ h }}">
-        </a>
-      </div>
-    </div>
-    <div class="col-xs-8 col-xs-height"></div>
-  </div>
-  {% empty %}
-  <div class="well">
-    <p>Rendering was a failure. This means Dolphin was not able to render this
-    test in less than 2 minutes, or that it crashed before the end of the
-    rendering.</p>
-  </div>
-  {% endfor %}
+{% if result.hashes %}
+  {% include "_results_diff_tbl.html" with current=result old=None %}
+{% else %}
+<div class="well">
+  <p>Rendering was a failure. This means Dolphin was not able to render this
+  test in less than 2 minutes, or that it crashed before the end of the
+  rendering.</p>
 </div>
+{% endif %}
 {% endblock %}
 
 <!-- vim: set ft=htmldjango ts=2 sw=2 et tw=160 : -->
