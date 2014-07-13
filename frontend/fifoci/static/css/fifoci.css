@@ -51,6 +51,9 @@ table.results-diff thead th {
     text-align: center;
     padding-bottom: 1em;
 }
+table.results-diff tbody {
+    vertical-align: center;
+}
 table.results-diff .results-col-curr {
     width: 30%;
     border: 0;
