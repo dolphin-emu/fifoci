@@ -16,13 +16,13 @@
           <a href="{{ MEDIA_URL }}results/{{ curr_h }}.png">
             <img src="{{ MEDIA_URL }}results/{{ curr_h }}.png" alt="{{ curr_h }}">
           </a>
-          {% else %}<strong>Failure</strong>{% endif %}</td>
+          {% elif current %}<strong>Failure</strong>{% endif %}</td>
         <td>{% if curr_h and old_h %}Diff TODO{% endif %}</td>
         <td class="result-image">{% if old_h %}
           <a href="{{ MEDIA_URL }}results/{{ old_h }}.png">
             <img src="{{ MEDIA_URL }}results/{{ old_h }}.png" alt="{{ old_h }}">
           </a>
-          {% else %}<strong>Failure</strong>{% endif %}</td>
+          {% elif old %}<strong>Failure</strong>{% endif %}</td>
       </tr>
     {% endfor %}
   </tbody>
