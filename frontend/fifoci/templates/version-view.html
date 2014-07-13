@@ -1,0 +1,53 @@
+{% extends "_base.html" %}
+
+{% load markup %}
+
+{% block "headtitle" %}Version: {{ ver.name }}{% endblock %}
+{% block "title" %}Information on {{ ver.name }}{% endblock %}
+
+{% block "content" %}
+<h2>Metadata</h2>
+<p>
+<ul>
+  <li>Hash: <tt><a href="https://github.com/dolphin-emu/dolphin/commit/{{ ver.hash }}">{{ ver.hash }}</a></tt></li>
+  <li>Parent:
+    {% if ver.parent %}
+    <a href="{{ ver.parent.get_absolute_url }}">{{ ver.parent.name }}</a>
+    {% else %}
+    none found
+    {% endif %}</li>
+</ul>
+</p>
+
+<h2>Test results</h2>
+<div class="well well-lg">
+  {% if results %}
+  <table class="version-result-table">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Test</th>
+        <th></th>
+        <th>Result</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for res, type_rowspan in results %}
+      <tr>
+        {% if type_rowspan %}
+        <th rowspan="{{ type_rowspan }}"><a href="/#{{ res.type }}">{{ res.type }}</a></th>
+        {% endif %}
+        <td><a href="{{ res.dff.get_absolute_url }}">{{ res.dff.shortname }}</a></td>
+        <td>{% if res.has_change %}<strong>DIFF</strong>{% endif %}</td>
+        <td>{% if res.hashes %}Rendered{% else %}Failure{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No results! This change might have broken Dolphin.</p>
+  {% endif %}
+</div>
+{% endblock %}
+
+<!-- vim: set ft=htmldjango ts=2 sw=2 et tw=160 : -->

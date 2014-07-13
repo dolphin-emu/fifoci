@@ -24,6 +24,10 @@ class Version(models.Model):
     submitted = models.BooleanField(default=False, db_index=True)
     ts = models.DateTimeField(auto_now_add=True, blank=True, db_index=True)
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('version-view', [self.hash])
+
     def __str__(self):
         return '%s (%s)' % (self.name, self.hash[:8])
 

@@ -62,6 +62,23 @@ def dff_view(request, name):
     return render(request, 'dff-view.html', dictionary=data)
 
 
+def version_view(request, hash):
+    ver = get_object_or_404(Version, hash=hash)
+    results = Result.objects.filter(ver=ver).order_by('type', 'dff__shortname')
+    colspan = []
+    i = 0
+    while i < len(results):
+        type = results[i].type
+        count = 1
+        while i + count < len(results) and results[i + count].type == type:
+            count += 1
+        colspan += [count] + [0] * count
+        i += count
+    data = {'ver': ver,
+            'results': zip(results, colspan)}
+    return render(request, 'version-view.html', dictionary=data)
+
+
 def dffs_to_test(request):
     dffs = FifoTest.objects.filter(active=True)
     out = []

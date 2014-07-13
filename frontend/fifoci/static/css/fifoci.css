@@ -34,3 +34,14 @@ table.result-table tbody td.success {
 table.result-table tbody td.missing {
     border: none;
 }
+
+/* Version results table */
+table.version-result-table thead th {
+    padding-left: 5px;
+    padding-right: 5px;
+    text-align: center;
+}
+table.version-result-table tbody td {
+    padding-left: 5px;
+    padding-right: 5px;
+}

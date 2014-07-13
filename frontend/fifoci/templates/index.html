@@ -17,9 +17,7 @@
       <thead>
         <tr>
           <th></th>
-          {% for ver in versions %}
-          <th>{{ ver.name }}</th>
-          {% endfor %}
+          {% include "_results_versions.html" with versions=versions only %}
         </tr>
       </thead>
       <tbody>
