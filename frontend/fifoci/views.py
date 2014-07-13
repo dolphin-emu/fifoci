@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from fifoci.models import FifoTest, Version, Result
 
 import os.path
@@ -8,26 +8,26 @@ import os.path
 N_VERSIONS_TO_SHOW = 20
 
 
+def _get_recent_results(n, res_per_vers, **cond):
+    recent_results = (Result.objects.select_related('ver')
+                                    .filter(has_change=True, **cond)
+                                    .order_by('-ver__ts')
+                                    [:n * res_per_vers])
+    versions_set = set()
+    versions = []
+    for res in recent_results:
+        if res.ver not in versions_set:
+            versions.append(res.ver)
+            versions_set.add(res.ver)
+    return versions[:n], recent_results
+
+
 def home(request):
     data = {'recent_results': []}
     types = list(sorted(Result.objects.values_list('type').distinct()))
     for (type,) in types:
-        # Upper bound of results to select to get N versions.
-        n_results = N_VERSIONS_TO_SHOW * FifoTest.objects.count()
-
-        recent_results = (Result.objects.select_related('ver')
-                                        .filter(type=type, has_change=True)
-                                        .order_by('-ver__ts')
-                                        [:n_results])
-
-        # Get the list of all versions
-        versions_set = set()
-        versions = []
-        for res in recent_results:
-            if res.ver not in versions_set:
-                versions.append(res.ver)
-                versions_set.add(res.ver)
-        versions = versions[:N_VERSIONS_TO_SHOW]
+        versions, recent_results = _get_recent_results(N_VERSIONS_TO_SHOW,
+                FifoTest.objects.count(), type=type)
 
         # For each FifoTest, get the list of all results, and insert Nones when
         # results are mising for a version.
@@ -42,6 +42,24 @@ def home(request):
 
         data['recent_results'].append((type, versions, fifo_tests_list))
     return render(request, 'index.html', dictionary=data)
+
+
+def dff_view(request, name):
+    dff = get_object_or_404(FifoTest, shortname=name)
+    versions, recent_results = _get_recent_results(N_VERSIONS_TO_SHOW,
+            10, dff=dff)
+    types = {t[0]: {} for t in Result.objects.values_list('type')}
+    for res in recent_results:
+        types[res.type][res.ver] = res
+    types_list = []
+    for type, test_results in types.items():
+        types_list.append((type, [test_results.get(v) for v in versions]))
+    types_list.sort(key=lambda k: k[0])
+
+    data = {'dff': dff,
+            'versions': versions,
+            'types_list': types_list}
+    return render(request, 'dff-view.html', dictionary=data)
 
 
 def dffs_to_test(request):

@@ -25,12 +25,8 @@
       <tbody>
         {% for dff, results in fifo_tests_list %}
         <tr>
-          <th>{{ dff.shortname }}</th>
-          {% for res in results %}
-          <td class="{% if res.hashes %}success{% elif res %}failure{% else %}missing{% endif %}">
-            {{ res.id }}
-          </td>
-          {% endfor %}
+          <th><a href="{{ dff.get_absolute_url }}">{{ dff.shortname }}</a></th>
+          {% include "_results_cells.html" with results=results only %}
         </tr>
         {% endfor %}
       </tbody>

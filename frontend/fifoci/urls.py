@@ -6,6 +6,8 @@ urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'fifoci.views.home', name='home'),
     url(r'^dff/$', 'fifoci.views.dffs_to_test'),
+    url(r'^dff/(?P<name>[a-zA-Z0-9-]+)/$', 'fifoci.views.dff_view',
+        name='dff-view'),
     url(r'^admin/', include(admin.site.urls)),
 )
 

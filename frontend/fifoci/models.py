@@ -8,6 +8,10 @@ class FifoTest(models.Model):
     active = models.BooleanField(default=True, db_index=True)
     description = models.TextField(blank=True)
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('dff-view', [self.shortname])
+
     def __str__(self):
         return self.shortname
 

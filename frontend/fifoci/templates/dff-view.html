@@ -1,0 +1,42 @@
+{% extends "_base.html" %}
+
+{% load markup %}
+
+{% block "headtitle" %}Test: {{ dff.name }}{% endblock %}
+{% block "title" %}{{ dff.name }}{% endblock %}
+
+{% block "content" %}
+<h2>Description</h2>
+<div class="col-sm-3">
+  TODO: Reference rendering here.
+</div>
+<div class="col-sm-9">
+  <div class="well">
+    {{ dff.description|markdown }}
+  </div>
+</div>
+
+<h2>Recent results</h2>
+<div class="result-table-container well well-lg">
+  <table class="result-table">
+    <thead>
+      <tr>
+        <th></th>
+        {% for ver in versions %}
+        <th>{{ ver.name }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for type, results in types_list %}
+      <tr>
+        <th><a href="/#{{ type }}">{{ type }}</a></th>
+        {% include "_results_cells.html" with results=results only %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+<!-- vim: set ft=htmldjango ts=2 sw=2 et tw=160 : -->

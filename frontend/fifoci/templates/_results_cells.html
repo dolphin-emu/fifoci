@@ -1,0 +1,6 @@
+{% for res in results %}
+  <td class="{% if res.hashes %}success{% elif res %}failure{% else %}missing{% endif %}">
+    {{ res.id }}
+  </td>
+{% endfor %}
+<!-- vim: set ft=htmldjango ts=2 sw=2 et tw=160 : -->
