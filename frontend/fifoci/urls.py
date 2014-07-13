@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     url(r'^compare/(?P<curr_id>\d+)-(?P<old_id>\d+)/$',
         'fifoci.views.compare_view', name='compare-view'),
     url(r'^about/$', 'fifoci.views.about_view', name='about-view'),
+    url(r'^existing-images/$', 'fifoci.views.existing_images'),
     url(r'^admin/', include(admin.site.urls)),
 )
 

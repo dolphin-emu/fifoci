@@ -2,10 +2,12 @@
 # Copyright (c) 2014 Pierre Bourdon <delroth@dolphin-emu.org>
 # Licensing information: see $REPO_ROOT/LICENSE
 
+from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from fifoci.models import FifoTest, Version, Result
 
+import os
 import os.path
 
 
@@ -111,3 +113,9 @@ def dffs_to_test(request):
         out.append({'shortname': dff.shortname, 'filename': filename,
                     'url': url})
     return JsonResponse(out, safe=False)
+
+
+def existing_images(request):
+    img = os.listdir(os.path.join(settings.MEDIA_ROOT, 'results'))
+    hashes = [i[:-4] for i in img if i.endswith('.png')]
+    return JsonResponse(hashes, safe=False)

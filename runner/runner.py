@@ -102,6 +102,13 @@ def generate_targets_list(dff_dir, url_base):
     return out
 
 
+def get_existing_images(url_base):
+    """Downloads the list of images already present on the server to reduce
+    upload footprint. Only new images will be present in the result zip.
+    """
+    return requests.get(url_base.rstrip('/') + '/existing-images/').json()
+
+
 def spawn_tests(args, targets):
     """Spawn the test runner, which will run each log and write output images
     to a given path.
@@ -145,6 +152,8 @@ def generate_results_data(args, targets):
     }
     zf = zipfile.ZipFile(args.output, 'w')
 
+    already_existing = get_existing_images(args.url_base)
+
     for dff_short_name, dff_path, out_path in targets:
         result = {'hashes': []}
         meta['results'][dff_short_name] = result
@@ -158,8 +167,9 @@ def generate_results_data(args, targets):
                     break
                 hash = compute_image_hash(fn)
                 result['hashes'].append(hash)
-                zf.writestr('fifoci-result/%s.png' % hash,
-                            open(fn, 'rb').read())
+                if hash not in already_existing:
+                    zf.writestr('fifoci-result/%s.png' % hash,
+                                open(fn, 'rb').read())
 
     zf.writestr('fifoci-result/meta.json', json.dumps(meta).encode('utf-8'))
     zf.close()
