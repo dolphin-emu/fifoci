@@ -8,6 +8,7 @@ def deploy():
         run("git fetch")
         run("git checkout master")
         run("git reset --hard origin/master")
+        run("~/pip install -r requirements.txt")
         with cd("/home/fifoci/fifoci/frontend"):
             run("~/python manage.py collectstatic --noinput")
             run("pkill -HUP gunicorn")
