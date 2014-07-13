@@ -5,48 +5,34 @@
 
 {% block "content" %}
   <ul class="nav nav-tabs">
-  {% for type, _ in recent_results %}
+  {% for type, _, _ in recent_results %}
     <li><a href="#{{ type|slugify }}">{{ type }}</a></li>
   {% endfor %}
   </ul>
 
-  {% for type, versions in recent_results %}
+  {% for type, versions, fifo_tests_list in recent_results %}
   <a name="{{ type|slugify }}"></a><h2>Differences for <tt>{{ type }}</tt></h2>
   <div class="result-table-container well well-lg">
     <table class="result-table">
       <thead>
         <tr>
           <th>Test</th>
-          <th>4.0-1234</th>
-          <th>4.0-1111</th>
-          <th>4.0-1000</th>
+          {% for ver in versions %}
+          <th>{{ ver.name }}</th>
+          {% endfor %}
         </tr>
       </thead>
       <tbody>
+        {% for dff, results in fifo_tests_list %}
         <tr>
-          <th>sample-fifolog-1</th>
-          <td>?</td>
-          <td>?</td>
-          <td>?</td>
+          <th>{{ dff.shortname }}</th>
+          {% for res in results %}
+          <td class="{% if res.hashes %}success{% elif res %}failure{% else %}missing{% endif %}">
+            {{ res.id }}
+          </td>
+          {% endfor %}
         </tr>
-        <tr>
-          <th>sample-fifolog-2</th>
-          <td>?</td>
-          <td>?</td>
-          <td>?</td>
-        </tr>
-        <tr>
-          <th>sample-fifolog-3</th>
-          <td>?</td>
-          <td>?</td>
-          <td>?</td>
-        </tr>
-        <tr>
-          <th>sample-fifolog-4</th>
-          <td>?</td>
-          <td>?</td>
-          <td>?</td>
-        </tr>
+        {% endfor %}
       </tbody>
     </table>
   </div>

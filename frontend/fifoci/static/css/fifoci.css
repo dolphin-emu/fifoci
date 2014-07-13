@@ -16,10 +16,20 @@ table.result-table tbody td {
     text-align: center;
     padding-left: 5px;
     padding-right: 5px;
+    border: 1px solid black;
 }
 table.result-table tbody th {
     padding-right: 10px;
 }
 div.result-table-container {
     margin-bottom: 2.5em;
+}
+table.result-table tbody td.failure {
+    background-color: #ef3d47;
+}
+table.result-table tbody td.success {
+    background-color: #90ee90;
+}
+table.result-table tbody td.missing {
+    border: none;
 }
