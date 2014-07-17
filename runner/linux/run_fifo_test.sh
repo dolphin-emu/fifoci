@@ -68,12 +68,21 @@ while [ "$#" -ne 0 ]; do
         echo "FIFO log playback failed for $DFF"
         touch $OUT/failure
     else
-        echo "FIFO playback done, extracting frames with ffmpeg to $OUT"
+        echo "FIFO playback done, extracting frames to $OUT"
 
-        # TODO(delroth): This only works for OpenGL/D3D, check how frame
-        # dumping works on the SW renderer.
-        ffmpeg -i $HOME/.dolphin-emu/Dump/Frames/framedump0.avi -f image2 \
-               $OUT/frame-%3d.png &> >(show_logs ffmpeg)
+        DUMPDIR=$HOME/.dolphin-emu/Dump/Frames
+        AVIFILE=$DUMPDIR/framedump0.avi
+        if [ -f "$AVIFILE" ]; then
+            ffmpeg -i $AVIFILE -f image2 $OUT/frame-%3d.png \
+                &> >(show_logs ffmpeg)
+        else
+            # Assume SW renderer style of .png frame dumping.
+            i=0
+            for f in $(ls -rt $DUMPDIR/*.png); do
+                mv -v $f `printf $OUT/frame-%03d.png $i`
+                i=$((i + 1))
+            done
+        fi
     fi
     chmod g+r -R $OUT
 
