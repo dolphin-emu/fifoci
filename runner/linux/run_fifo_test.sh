@@ -61,6 +61,9 @@ while [ "$#" -ne 0 ]; do
     mkdir -p $HOME/.dolphin-emu
     cp -r $BASE/Config-$BACKEND $HOME/.dolphin-emu/Config
 
+    DUMPDIR=$HOME/.dolphin-emu/Dump/Frames
+    mkdir -p $DUMPDIR
+
     echo "Starting DolphinNoGui with a $TIMEOUT timeout"
 
     $TIMEOUT_CMD $DOLPHIN -e $DFF &> >(show_logs Dolphin)
@@ -70,7 +73,6 @@ while [ "$#" -ne 0 ]; do
     else
         echo "FIFO playback done, extracting frames to $OUT"
 
-        DUMPDIR=$HOME/.dolphin-emu/Dump/Frames
         AVIFILE=$DUMPDIR/framedump0.avi
         if [ -f "$AVIFILE" ]; then
             ffmpeg -i $AVIFILE -f image2 $OUT/frame-%3d.png \
