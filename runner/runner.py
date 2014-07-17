@@ -78,10 +78,15 @@ def find_parents(rev_hash):
 
 def download_dff(url, path):
     """Downloads a missing DFF from the specified URL to a given FS path."""
+    resp = requests.get(url, stream=True)
+    if resp.status_code != 200:
+        print('DFF %s not found' % url)
+        return False
     with open(path, 'wb') as fp:
-        for chunk in requests.get(url, stream=True).iter_content(chunk_size=4096):
+        for chunk in resp.iter_content(chunk_size=4096):
             if chunk:
                 fp.write(chunk)
+    return True
 
 
 def generate_targets_list(dff_dir, url_base):
@@ -94,11 +99,13 @@ def generate_targets_list(dff_dir, url_base):
     spec = requests.get(url_base + '/dff/').json()
     for target in spec:
         path = os.path.join(dff_dir, target['filename'])
+        success = True
         if not os.path.exists(path):
             print('DFF %s does not exist, downloading...' % path)
-            download_dff(url_base + target['url'], path)
-        out.append((target['shortname'], path,
-                    tempfile.mkdtemp(suffix='.fifoci-out')))
+            success = download_dff(url_base + target['url'], path)
+        if success:
+            out.append((target['shortname'], path,
+                        tempfile.mkdtemp(suffix='.fifoci-out')))
     return out
 
 
