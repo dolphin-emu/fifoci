@@ -28,9 +28,11 @@ DOLPHIN=$1; shift
 
 echo "FIFOCI Worker starting for $DOLPHIN"
 
-# Start a dummy X server on :1.
-# TODO(delroth): Find the next usable display.
-export DISPLAYNUM=1
+# Start a dummy X server on the first usable display (:0, :1, :2, ...).
+export DISPLAYNUM=0
+while [ -e /tmp/.X11-unix/X$DISPLAYNUM ]; do
+    DISPLAYNUM=$((DISPLAYNUM + 1))
+done
 export DISPLAY=:$DISPLAYNUM
 echo "Starting a headless Xorg server on $DISPLAY"
 if [ -f "$HOME/fifoci-xorg.conf" ]; then
