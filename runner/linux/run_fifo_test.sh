@@ -10,7 +10,10 @@ if [ "$#" -lt 2 ]; then
 fi
 
 BASE=$(dirname $0)
+SCRIPTNAME=$(basename $0)
 TIMEOUT=2m
+
+LOCKFILE="/tmp/${SCRIPTNAME}.lock"
 
 if [ -z "$FIFOCI_NO_TIMEOUT" ]; then
     TIMEOUT_CMD="timeout -s 9 $TIMEOUT"
@@ -27,6 +30,12 @@ DRIVER=$1; shift
 DOLPHIN=$1; shift
 
 echo "FIFOCI Worker starting for $DOLPHIN"
+
+#Open lock file
+exec 200>$LOCKFILE
+
+#Lock lock file
+flock -x 200 || exit 1
 
 # Start a dummy X server on the first usable display (:0, :1, :2, ...).
 export DISPLAYNUM=0
@@ -48,6 +57,12 @@ while ! [ -e "/tmp/.X11-unix/X$DISPLAYNUM" ]; do
     echo "Waiting for the X11 server to be ready..."
     sleep 0.1
 done
+
+#Unlock lock file
+flock -u 200
+
+#Close lock file
+exec 200>&-
 
 echo 'Ready to process FIFO logs \o/'
 
