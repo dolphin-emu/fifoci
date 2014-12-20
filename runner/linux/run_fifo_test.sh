@@ -66,6 +66,8 @@ exec 200>&-
 
 echo 'Ready to process FIFO logs \o/'
 
+XORG_CHILDREN_PIDS="$(ps --ppid $XORG_PID -o pid=)"
+
 while [ "$#" -ne 0 ]; do
     DFF=$(echo "$1" | cut -d : -f 1)
     OUT=$(echo "$1" | cut -d : -f 2)
@@ -112,5 +114,5 @@ done
 echo "Processing done, cleaning up"
 
 # Cleanup: kill Xorg, rm the temporary directory.
-sudo kill $XORG_PID
+sudo kill $XORG_CHILDREN_PIDS $XORG_PID
 wait $XORG_PID
