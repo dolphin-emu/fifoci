@@ -151,7 +151,7 @@ def generate_results_data(args, targets):
     meta = {
         'type': args.type,
         'rev': {
-            'parents': find_parents(args.rev_hash),
+            'parents': find_parents(args.rev_base_hash),
             'hash': args.rev_hash,
             'name': args.rev_name,
             'submitted': args.rev_submitted.lower() in ['true', 'yes', '1'],
@@ -194,6 +194,7 @@ if __name__ == '__main__':
         description='Run fifoCI tests on a given Dolphin build')
     parser.add_argument('--type', required=True)
     parser.add_argument('--dolphin', required=True)
+    parser.add_argument('--rev_base_hash', required=True)
     parser.add_argument('--rev_hash', required=True)
     parser.add_argument('--rev_name', required=True)
     parser.add_argument('--rev_submitted', required=True)
