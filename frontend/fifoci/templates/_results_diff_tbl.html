@@ -14,13 +14,13 @@
       <tr>
         <td class="result-image">{% if curr_h %}
           <a href="{{ MEDIA_URL }}results/{{ curr_h }}.png">
-            <img src="{{ MEDIA_URL }}results/{{ curr_h }}.png" alt="{{ curr_h }}">
+            <img id="res-{{ forloop.counter0 }}-a" src="{{ MEDIA_URL }}results/{{ curr_h }}.png" alt="{{ curr_h }}">
           </a>
           {% elif current %}<strong>Failure</strong>{% endif %}</td>
-        <td>{% if curr_h and old_h %}Diff TODO{% endif %}</td>
+        <td class="result-image" id="res-{{ forloop.counter0 }}-diff">{% if curr_h and old_h %}Waiting for diff...{% endif %}</td>
         <td class="result-image">{% if old_h %}
           <a href="{{ MEDIA_URL }}results/{{ old_h }}.png">
-            <img src="{{ MEDIA_URL }}results/{{ old_h }}.png" alt="{{ old_h }}">
+            <img id="res-{{ forloop.counter0 }}-b"  src="{{ MEDIA_URL }}results/{{ old_h }}.png" alt="{{ old_h }}">
           </a>
           {% elif old %}<strong>Failure</strong>{% endif %}</td>
       </tr>

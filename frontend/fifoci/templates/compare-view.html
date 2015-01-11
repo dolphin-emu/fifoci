@@ -1,5 +1,7 @@
 {% extends "_base.html" %}
 
+{% load static from staticfiles %}
+
 {% block "headtitle" %}{{ current.ver.name }} vs. {{ old.ver.name }} / {{ current.type }} / {{ current.dff }}{% endblock %}
 {% block "title" %}
 <a href="{{ current.ver.get_absolute_url }}">{{ current.ver.name }}</a> vs.
@@ -10,6 +12,11 @@
 
 {% block "content" %}
 {% include "_results_diff_tbl.html" with current=current old=old %}
+{% endblock %}
+
+{% block "head" %}
+    <script src="{% static "js/imagediff.js" %}"></script>
+    <script src="{% static "js/compare_results.js" %}"></script>
 {% endblock %}
 
 <!-- vim: set ft=htmldjango ts=2 sw=2 et tw=160 : -->
