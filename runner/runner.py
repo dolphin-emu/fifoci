@@ -154,6 +154,7 @@ def generate_results_data(args, targets):
             'parents': find_parents(args.rev_hash),
             'hash': args.rev_hash,
             'name': args.rev_name,
+            'submitted': args.rev_submitted.lower() in ['true', 'yes', '1'],
         },
         'results': {}
     }
@@ -195,6 +196,7 @@ if __name__ == '__main__':
     parser.add_argument('--dolphin', required=True)
     parser.add_argument('--rev_hash', required=True)
     parser.add_argument('--rev_name', required=True)
+    parser.add_argument('--rev_submitted', required=True)
     parser.add_argument('--output', required=True)
     parser.add_argument('--url_base', required=True)
     parser.add_argument('--dff_dir', required=True)

@@ -35,7 +35,7 @@ def get_or_create_ver(rev):
         obj = Version()
         obj.hash = rev['hash']
         obj.name = rev['name']
-        obj.submitted = True  # TODO
+        obj.submitted = rev['submitted']
 
         parent, parent_hash = find_first_parent(rev['parents'])
         obj.parent = parent
