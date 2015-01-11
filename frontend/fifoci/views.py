@@ -37,7 +37,7 @@ def home(request):
     types = list(sorted(Result.objects.values_list('type').distinct()))
     for (type,) in types:
         versions, recent_results = _get_recent_results(N_VERSIONS_TO_SHOW,
-                FifoTest.objects.count(), type=type)
+                FifoTest.objects.count(), type=type, ver__submitted=True)
 
         # For each FifoTest, get the list of all results, and insert Nones when
         # results are mising for a version.
