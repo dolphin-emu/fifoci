@@ -28,22 +28,28 @@
         <th>Type</th>
         <th>Test</th>
         <th></th>
-        <th>Result</th>
+        <th></th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
-      {% for res, type_rowspan in results %}
+      {% for res, type_rowspan, parent_res in results %}
       <tr class="{% if type_rowspan %}new-type{% endif %}">
         {% if type_rowspan %}
         <th rowspan="{{ type_rowspan }}"><a href="/#{{ res.type }}">{{ res.type }}</a></th>
         {% endif %}
         <td><a href="{{ res.dff.get_absolute_url }}">{{ res.dff.shortname }}</a></td>
-        <td>{% if res.has_change %}<strong>DIFF</strong>{% endif %}</td>
+        <td>{% if res.has_change %}<strong>DIFF</strong>{% else %}No diff{% endif %}</td>
         <td>
           {% if res.hashes %}
-          <a href="{{ res.get_absolute_url }}">Rendered</a>
+          <a href="{{ res.get_absolute_url }}">Result</a>
           {% else %}
           Failure
+          {% endif %}
+        </td>
+        <td>
+          {% if parent_res and res.has_change %}
+          <a href="{% url 'compare-view' res.id parent_res.id %}">Compare</a>
           {% endif %}
         </td>
       </tr>

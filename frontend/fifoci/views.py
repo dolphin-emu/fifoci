@@ -78,6 +78,17 @@ def dff_view(request, name):
 def version_view(request, hash):
     ver = get_object_or_404(Version, hash=hash)
     results = Result.objects.filter(ver=ver).order_by('type', 'dff__shortname')
+    if ver.parent:
+        parent_results_qs = Result.objects.filter(ver=ver.parent).order_by(
+                'type', 'dff__shortname')
+        parent_results_dict = {}
+        for res in parent_results_qs:
+            parent_results_dict[(res.type, res.dff.shortname)] = res
+        parent_results = [parent_results_dict.get((res.type,
+                                                   res.dff.shortname), None)
+                          for res in results]
+    else:
+        parent_results = [None] * len(results)
     rowspan = []
     i = 0
     while i < len(results):
@@ -88,7 +99,7 @@ def version_view(request, hash):
         rowspan += [count] + [0] * (count - 1)
         i += count
     data = {'ver': ver,
-            'results': zip(results, rowspan)}
+            'results': zip(results, rowspan, parent_results)}
     return render(request, 'version-view.html', dictionary=data)
 
 
