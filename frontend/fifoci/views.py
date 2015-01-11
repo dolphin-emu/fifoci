@@ -58,7 +58,7 @@ def home(request):
 def dff_view(request, name):
     dff = get_object_or_404(FifoTest, shortname=name)
     versions, recent_results = _get_recent_results(N_VERSIONS_TO_SHOW,
-            10, dff=dff)
+            10, dff=dff, ver__submitted=True)
     types = {t[0]: {} for t in Result.objects.values_list('type')}
     for res in recent_results:
         types[res.type][res.ver] = res
