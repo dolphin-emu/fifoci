@@ -30,7 +30,7 @@ SECRET_KEY = os.urandom(32)
 DEBUG = False
 TEMPLATE_DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['fifoci.dolphin-emu.org']
 
 
 # Application definition
