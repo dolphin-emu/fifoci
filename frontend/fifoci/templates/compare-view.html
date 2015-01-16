@@ -14,6 +14,23 @@
 {% include "_results_diff_tbl.html" with current=current old=old %}
 {% endblock %}
 
+{% block "sidebar" %}
+<div id="diff-ui" class="btn-group-vertical" data-toggle="buttons">
+  <label class="btn btn-primary active" id="diff-ui-diff">
+    <input type="radio" name="diff">Diff</input>
+  </label>
+  <label class="btn btn-primary" id="diff-ui-bright">
+    <input type="radio" name="diff">Bright</input>
+  </label>
+  <label class="btn btn-primary" id="diff-ui-left">
+    <input type="radio" name="diff">Left</input>
+  </label>
+  <label class="btn btn-primary" id="diff-ui-right">
+    <input type="radio" name="diff">Right</input>
+  </label>
+</div>
+{% endblock %}
+
 {% block "head" %}
     <script src="{% static "js/imagediff.js" %}"></script>
     <script src="{% static "js/compare_results.js" %}"></script>

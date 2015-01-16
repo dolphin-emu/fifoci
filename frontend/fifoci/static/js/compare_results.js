@@ -32,10 +32,11 @@ function make_diff(img_id_a, img_id_b, diff_id) {
   var canvas = imagediff.createCanvas(diff.width, diff.height);
   context = canvas.getContext('2d');
   context.putImageData(diff, 0, 0);
-  var image = new Image();
-  image.src = canvas.toDataURL("image/png");
-  diff_container.innerHTML = '';
-  diff_container.appendChild(image);
+  diff_container.innerHTML = (
+    '<img class="img-diff" src="' + canvas.toDataURL("image/png") + '">' +
+    '<img class="img-a" src="' + img_a.src + '">' +
+    '<img class="img-b" src="' + img_b.src + '">'
+  );
 }
 
 $(window).load(function() {
@@ -47,4 +48,24 @@ $(window).load(function() {
     make_diff("res-" + i + "-a", "res-" + i + "-b", "res-" + i + "-diff");
     i++;
   }
+  $(".img-a, .img-b").hide();
+
+  $('#diff-ui-bright').click(function() {
+    var b = 1000;
+    $('.img-a, .img-b').hide();
+    $('.img-diff').show().css({'filter': 'brightness(' + b + ')',
+                               '-webkit-filter': 'brightness(' + b + ')'});
+  });
+  $('#diff-ui-diff').click(function() {
+    $('.img-a, .img-b').hide();
+    $('.img-diff').show().css({'filter': '', '-webkit-filter': ''});
+  });
+  $('#diff-ui-left').click(function() {
+    $('.img-diff, .img-b').hide();
+    $('.img-a').show();
+  });
+  $('#diff-ui-right').click(function() {
+    $('.img-diff, .img-a').hide();
+    $('.img-b').show();
+  });
 })

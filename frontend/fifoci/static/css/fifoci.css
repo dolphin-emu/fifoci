@@ -82,3 +82,20 @@ table.results-diff td.result-image img {
     width: 100%;
     margin-bottom: 5px;
 }
+
+.result-image {
+    position: relative;
+}
+
+#diff-ui {
+    position: absolute;
+    bottom: 50px;
+    left: 25px;
+    width: 200px;
+}
+
+@supports not ((filter:brightness(10)) or (-webkit-filter:brightness(10))) {
+    #diff-ui-bright {
+        display: none;
+    }
+}
