@@ -3,6 +3,7 @@
 # Licensing information: see $REPO_ROOT/LICENSE
 
 from django.conf import settings
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from fifoci.models import FifoTest, Version, Result
@@ -15,8 +16,9 @@ N_VERSIONS_TO_SHOW = 20
 
 
 def _get_recent_results(n, res_per_vers, **cond):
+    should_display = Q(has_change=True) | Q(first_result=True)
     recent_results = (Result.objects.select_related('ver')
-                                    .filter(has_change=True, **cond)
+                                    .filter(should_display, **cond)
                                     .order_by('-ver__ts')
                                     [:n * res_per_vers])
     versions_set = set()

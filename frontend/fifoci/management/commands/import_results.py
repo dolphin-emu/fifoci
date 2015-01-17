@@ -71,8 +71,10 @@ def import_result(type, ver, parent, zf, dff_short_name, result):
     try:
         old_r = Result.objects.get(dff=dff, ver=parent, type=type)
         r.has_change = old_r.hashes != r.hashes
+        r.first_result = False
     except Result.DoesNotExist:
-        r.has_change = True
+        r.has_change = False
+        r.first_result = True
 
     base_path = os.path.join(settings.MEDIA_ROOT, 'results')
     pngcrush = shutil.which('pngcrush') is not None

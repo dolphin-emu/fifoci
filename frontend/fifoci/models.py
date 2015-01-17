@@ -41,6 +41,7 @@ class Result(models.Model):
     ver = models.ForeignKey(Version)
     type = models.CharField(max_length=64, db_index=True)
     has_change = models.BooleanField(default=False, db_index=True)
+    first_result = models.BooleanField(default=False, db_index=True)
 
     # Format: "h1,h2,h3,...,hN"
     hashes = models.TextField()
