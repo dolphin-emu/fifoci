@@ -26,7 +26,7 @@ def _get_recent_results(n, res_per_vers, **cond):
             versions.append(res.ver)
             versions_set.add(res.ver)
 
-    recent_results = (Result.objects.select_related('ver')
+    recent_results = (Result.objects.select_related('ver', 'dff')
                                     .filter(ver__in=versions, **cond)
                                     .order_by('-ver__ts'))
     return versions[:n], recent_results
@@ -35,13 +35,15 @@ def _get_recent_results(n, res_per_vers, **cond):
 def home(request):
     data = {'recent_results': []}
     types = list(sorted(Result.objects.values_list('type').distinct()))
+    num_dff = FifoTest.objects.count()
+    active_dff = FifoTest.objects.filter(active=True)
     for (type,) in types:
         versions, recent_results = _get_recent_results(N_VERSIONS_TO_SHOW,
-                FifoTest.objects.count(), type=type, ver__submitted=True)
+                num_dff, type=type, ver__submitted=True)
 
         # For each FifoTest, get the list of all results, and insert Nones when
         # results are mising for a version.
-        fifo_tests = {dff: {} for dff in FifoTest.objects.filter(active=True)}
+        fifo_tests = {dff: {} for dff in active_dff}
         for res in recent_results:
             fifo_tests[res.dff][res.ver] = res
         fifo_tests_list = []
