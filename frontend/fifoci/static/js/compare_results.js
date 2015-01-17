@@ -48,6 +48,7 @@ $(window).load(function() {
     make_diff("res-" + i + "-a", "res-" + i + "-b", "res-" + i + "-diff");
     i++;
   }
+
   $(".img-a, .img-b").hide();
 
   $('#diff-ui-bright').click(function() {
@@ -68,4 +69,16 @@ $(window).load(function() {
     $('.img-diff, .img-a').hide();
     $('.img-b').show();
   });
+
+  $(document).keydown(function (e) {
+    $({
+      49: '#diff-ui-diff',   // 1
+      50: '#diff-ui-bright', // 2
+      51: '#diff-ui-left',   // 3
+      52: '#diff-ui-right'   // 4
+    }[e.which]).click();
+  });
+
+  // Enable the keyboard shortcut tooltips.
+  $('[data-toggle="tooltip"]').tooltip({container: 'body'})
 })
