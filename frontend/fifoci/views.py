@@ -79,10 +79,11 @@ def dff_view(request, name):
 
 def version_view(request, hash):
     ver = get_object_or_404(Version, hash=hash)
-    results = Result.objects.filter(ver=ver).order_by('type', 'dff__shortname')
+    results = Result.objects.select_related('ver', 'dff').filter(
+            ver=ver).order_by('type', 'dff__shortname')
     if ver.parent:
-        parent_results_qs = Result.objects.filter(ver=ver.parent).order_by(
-                'type', 'dff__shortname')
+        parent_results_qs = Result.objects.select_related('ver', 'dff').filter(
+                ver=ver.parent).order_by('type', 'dff__shortname')
         parent_results_dict = {}
         for res in parent_results_qs:
             parent_results_dict[(res.type, res.dff.shortname)] = res
