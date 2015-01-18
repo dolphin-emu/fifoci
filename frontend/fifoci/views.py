@@ -29,7 +29,8 @@ def _get_recent_results(n, res_per_vers, **cond):
             versions_set.add(res.ver)
 
     recent_results = (Result.objects.select_related('ver', 'dff')
-                                    .filter(ver__in=versions, **cond)
+                                    .filter(ver__in=versions,
+                                            dff__active=True, **cond)
                                     .order_by('-ver__ts'))
     return versions[:n], recent_results
 
