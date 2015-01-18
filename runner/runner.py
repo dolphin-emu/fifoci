@@ -148,10 +148,13 @@ def generate_results_data(args, targets):
     """Writes the results to a ZIP file. Metadata is contained in a JSON
     object, and images are stored as individual files.
     """
+    parents = find_parents(args.rev_base_hash)
+    if args.rev_base_hash != args.rev_hash:
+        parents = [args.rev_base_hash] + parents
     meta = {
         'type': args.type,
         'rev': {
-            'parents': find_parents(args.rev_base_hash),
+            'parents': parents,
             'hash': args.rev_hash,
             'name': args.rev_name,
             'submitted': args.rev_submitted.lower() in ['true', 'yes', '1'],
