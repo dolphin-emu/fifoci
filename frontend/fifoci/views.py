@@ -3,6 +3,7 @@
 # Licensing information: see $REPO_ROOT/LICENSE
 
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
@@ -80,10 +81,9 @@ def dff_view(request, name):
     return render(request, 'dff-view.html', dictionary=data)
 
 
-def version_view(request, hash):
-    ver = get_object_or_404(Version, hash=hash)
+def get_version_results(ver, **cond):
     results = Result.objects.select_related('ver', 'dff').filter(
-            ver=ver).order_by('type', 'dff__shortname')
+            ver=ver, **cond).order_by('type', 'dff__shortname')
     if ver.parent:
         parent_results_qs = Result.objects.select_related('ver', 'dff').filter(
                 ver=ver.parent).order_by('type', 'dff__shortname')
@@ -95,6 +95,12 @@ def version_view(request, hash):
                           for res in results]
     else:
         parent_results = [None] * len(results)
+    return results, parent_results
+
+
+def version_view(request, hash):
+    ver = get_object_or_404(Version, hash=hash)
+    results, parent_results = get_version_results(ver)
     rowspan = []
     i = 0
     while i < len(results):
@@ -107,6 +113,17 @@ def version_view(request, hash):
     data = {'ver': ver,
             'results': zip(results, rowspan, parent_results)}
     return render(request, 'version-view.html', dictionary=data)
+
+
+def version_view_json(request, hash):
+    ver = get_object_or_404(Version, hash=hash)
+    results, parent_results = get_version_results(ver, has_change=True)
+    data = []
+    for r, pr in zip(results, parent_results):
+        data.append({'type': r.type, 'dff': r.dff.shortname,
+                     'failure': not bool(r.hashes),
+                     'url': reverse('compare-view', args=[r.id, pr.id])})
+    return JsonResponse(data, safe=False)
 
 
 def result_view(request, id):
