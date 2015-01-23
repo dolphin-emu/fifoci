@@ -94,8 +94,12 @@ table.results-diff td.result-image img {
     width: 200px;
 }
 
-@supports not ((filter:brightness(10)) or (-webkit-filter:brightness(10))) {
+#diff-ui-bright {
+    display: none;
+}
+
+@supports (filter:brightness(10)) or (-webkit-filter:brightness(10)) {
     #diff-ui-bright {
-        display: none;
+        display: block;
     }
 }
