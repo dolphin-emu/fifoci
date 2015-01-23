@@ -85,7 +85,8 @@ while [ "$#" -ne 0 ]; do
 
     echo "Starting DolphinNoGui with a $TIMEOUT timeout"
 
-    $TIMEOUT_CMD $DOLPHIN -e $DFF &> >(show_logs Dolphin)
+    LD_PRELOAD=/lib/libSegFault.so SEGFAULT_SIGNALS="abrt segv" \
+      $TIMEOUT_CMD $DOLPHIN -e $DFF &> >(show_logs Dolphin)
     if [ "$?" -ne 0 ]; then
         echo "FIFO log playback failed for $DFF"
         touch $OUT/failure
