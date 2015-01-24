@@ -21,12 +21,14 @@ else
     TIMEOUT_CMD=""
 fi
 
-for f in /lib/libSegFault.so /lib64/libSegFault.so; do
+LIBSEGFAULT=""
+for f in /lib/x86_64-linux-gnu/libSegFault.so /lib/libSegFault.so /lib64/libSegFault.so; do
   if [ -e $f ]; then
     LIBSEGFAULT=$f
     break
   fi
 done
+echo "Using libSegFault: $LIBSEGFAULT"
 
 show_logs() {
     sed "s/^/$1>>> /"
