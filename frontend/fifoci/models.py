@@ -38,7 +38,7 @@ class Version(models.Model):
 
 class Result(models.Model):
     dff = models.ForeignKey(FifoTest)
-    ver = models.ForeignKey(Version)
+    ver = models.ForeignKey(Version, related_name='results')
     type = models.CharField(max_length=64, db_index=True)
     has_change = models.BooleanField(default=False, db_index=True)
     first_result = models.BooleanField(default=False, db_index=True)
