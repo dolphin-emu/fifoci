@@ -13,7 +13,7 @@ import os
 import os.path
 
 
-N_VERSIONS_TO_SHOW = 20
+N_VERSIONS_TO_SHOW = 35
 
 
 def _get_recent_results(n, res_per_vers, **cond):

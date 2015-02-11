@@ -9,8 +9,16 @@
 
 /* Homepage recent changes table */
 table.result-table thead th {
-    padding-left: 5px;
-    padding-right: 5px;
+    height: 50px;
+    white-space: nowrap;
+}
+table.result-table thead th > div {
+    transform: translate(20px, 9px) rotate(315deg);
+    width: 30px;
+}
+table.result-table thead th > div > a {
+    border-bottom: 1px solid #ccc;
+    padding-top: 4px;
 }
 table.result-table tbody td {
     text-align: center;
@@ -18,13 +26,19 @@ table.result-table tbody td {
     padding-right: 5px;
     border: 1px solid black;
     border-left: none;
+    font-size: 80%;
 }
 table.result-table tbody th {
     text-align: right;
     padding-right: 10px;
+    white-space: nowrap;
 }
 div.result-table-container {
     margin-bottom: 2.5em;
+    line-height: 100%;
+}
+div.result-table-container a {
+    font-weight: normal;
 }
 table.result-table tbody td.failure {
     background-color: #ef3d47;
