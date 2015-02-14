@@ -32,3 +32,17 @@ class Command(BaseCommand):
                 res.save()
             except Result.DoesNotExist:
                 continue
+
+        # Look for changes that are not really changes.
+        for res in Result.objects.select_related('ver', 'ver__parent').filter(
+                has_change=True, ver__parent__isnull=False):
+            try:
+                prev_res = Result.objects.get(ver=res.ver.parent,
+                                              type=res.type,
+                                              dff=res.dff)
+                if res.hashes == prev_res.hashes:
+                    print('Fixing %r: not really a change' % res)
+                    res.has_change = False
+                    res.save()
+            except Result.DoesNotExist:
+                continue
