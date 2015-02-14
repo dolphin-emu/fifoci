@@ -206,10 +206,10 @@ if __name__ == '__main__':
     parser.add_argument('--dff_dir', required=True)
     args = parser.parse_args()
 
-    if not recent_enough():
+    if os.path.exists('.git') and not recent_enough():
         print('The requested version is lacking features required for fifoci.')
         print('Exiting early without providing results.')
-        sys.exit(0)
+        sys.exit(1)
 
     targets = generate_targets_list(args.dff_dir, args.url_base)
     spawn_tests(args, targets)
