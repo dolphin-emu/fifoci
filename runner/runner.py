@@ -197,7 +197,8 @@ def generate_results_data(args, targets):
 
                 # HACK: Currently D3D on Windows inserts a black frame as the
                 # first frame of all recordings.
-                if i == 1 and hash == 'f971f36357cc45414090cecece55a91ee19aab29':
+                if i == 1 and hash in ('f971f36357cc45414090cecece55a91ee19aab29',
+                                       '44bba96a45cf665df718f81ea48f867e174999da'):
                     continue
 
                 result['hashes'].append(hash)
