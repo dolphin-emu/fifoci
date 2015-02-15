@@ -123,9 +123,22 @@ def spawn_tests(args, targets):
     base_path = os.path.dirname(__file__)
     backend, system, driver = args.type.split('-', 2)
 
+    # HACK: Since we use : as field separator, C:\ paths on windows break.
+    # Assume that we are only ever going to run fifoci on the system drive and
+    # strip the drive.
+    def strip_drive(p):
+        return p[2:] if p[1] == ':' else p
+    if system == 'win':
+        targets = [(t[0], strip_drive(t[1]), strip_drive(t[2]))
+                   for t in targets]
+
+    target_descr = ' '.join(':'.join(target[1:]) for target in targets)
     if system == 'lin':
-        target_descr = ' '.join(':'.join(target[1:]) for target in targets)
         ret = os.system('%s/linux/run_fifo_test.sh %s %s %s %s'
+                        % (base_path, backend, driver, args.dolphin,
+                           target_descr))
+    elif system == 'win':
+        ret = os.system('powershell %s/windows/run_fifo_test.ps1 %s %s %s %s'
                         % (base_path, backend, driver, args.dolphin,
                            target_descr))
     else:
