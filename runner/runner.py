@@ -194,6 +194,12 @@ def generate_results_data(args, targets):
                 if not os.path.exists(fn):
                     break
                 hash = compute_image_hash(fn)
+
+                # HACK: Currently D3D on Windows inserts a black frame as the
+                # first frame of all recordings.
+                if i == 1 and hash == 'f971f36357cc45414090cecece55a91ee19aab29':
+                    continue
+
                 result['hashes'].append(hash)
                 if hash not in already_existing:
                     zf.writestr('fifoci-result/%s.png' % hash,
