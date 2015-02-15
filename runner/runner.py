@@ -58,9 +58,13 @@ def recent_enough():
     20e82ec08c9ab811b04664a6a4f9859924f712f0 adds the configuration option to
     stop a FIFO log playback after the last frame was rendered (instead of
     looping back to the first frame).
+
+    b7916f965530b0369bf08ed6bc9ec3ef20f7cd2f fixes a WX assert error that
+    causes freezes on Windows FifoCI (and is a close descendent of another
+    commits that adds DumpFramesSilent to remove more interactivity).
     """
     return os.system('git merge-base --is-ancestor '
-                     '20e82ec08c9ab811b04664a6a4f9859924f712f0 HEAD') == 0
+                     'b7916f965530b0369bf08ed6bc9ec3ef20f7cd2f HEAD') == 0
 
 
 def find_parents(rev_hash):
