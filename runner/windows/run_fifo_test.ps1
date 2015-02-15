@@ -45,6 +45,7 @@ foreach ($spec in $args[3..$args.length]) {
   $success = $TRUE
   if (-not $proc.WaitForExit(60000)) {
     $proc.Kill()
+    $proc.WaitForExit(5000)
     write-host "$dff playback timed out after 60s"
     $success = $FALSE
   }
