@@ -110,7 +110,7 @@ while [ "$#" -ne 0 ]; do
             # Assume SW renderer style of .png frame dumping.
             i=0
             for f in $(ls -rt $DUMPDIR/*.png); do
-                mv -v $f `printf $OUT/frame-%03d.png $i`
+                convert -alpha deactivate $f `printf $OUT/frame-%03d.png $i`
                 i=$((i + 1))
             done
         fi
