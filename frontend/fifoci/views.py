@@ -58,7 +58,7 @@ def home(request):
         fifo_tests_list.sort(key=lambda k: k[0].shortname)
 
         data['recent_results'].append((type, versions, fifo_tests_list))
-    return render(request, 'index.html', dictionary=data)
+    return render(request, 'index.html', context=data)
 
 
 def dff_view(request, name):
@@ -78,7 +78,7 @@ def dff_view(request, name):
     data = {'dff': dff,
             'versions': versions,
             'types_list': types_list}
-    return render(request, 'dff-view.html', dictionary=data)
+    return render(request, 'dff-view.html', context=data)
 
 
 def get_version_results(ver, **cond):
@@ -112,7 +112,7 @@ def version_view(request, hash):
         i += count
     data = {'ver': ver,
             'results': zip(results, rowspan, parent_results)}
-    return render(request, 'version-view.html', dictionary=data)
+    return render(request, 'version-view.html', context=data)
 
 
 def version_view_json(request, hash):
@@ -128,14 +128,14 @@ def version_view_json(request, hash):
 
 def result_view(request, id):
     res = get_object_or_404(Result, pk=id)
-    return render(request, 'result-view.html', dictionary={'result': res})
+    return render(request, 'result-view.html', context={'result': res})
 
 
 def compare_view(request, curr_id, old_id):
     current = get_object_or_404(Result, pk=curr_id)
     old = get_object_or_404(Result, pk=old_id)
     data = {'current': current, 'old': old}
-    return render(request, 'compare-view.html', dictionary=data)
+    return render(request, 'compare-view.html', context=data)
 
 
 def about_view(request):
