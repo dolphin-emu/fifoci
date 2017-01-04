@@ -47,8 +47,8 @@ class Result(models.Model):
     dff = models.ForeignKey(FifoTest)
     ver = models.ForeignKey(Version, related_name='results')
     type = models.ForeignKey(Type)
-    has_change = models.BooleanField(default=False, db_index=True)
-    first_result = models.BooleanField(default=False, db_index=True)
+    has_change = models.BooleanField(default=False)
+    first_result = models.BooleanField(default=False)
 
     # Format: "h1,h2,h3,...,hN"
     hashes = models.TextField()
