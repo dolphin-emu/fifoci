@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
-from fifoci.models import FifoTest, Version, Result
+from fifoci.models import FifoTest, Version, Result, Type
 
 import os
 import os.path
@@ -38,10 +38,10 @@ def _get_recent_results(n, res_per_vers, **cond):
 
 def home(request):
     data = {'recent_results': []}
-    types = list(sorted(Result.objects.values_list('type').distinct()))
+    types = Type.objects.order_by('type')
     num_dff = FifoTest.objects.count()
     active_dff = FifoTest.objects.filter(active=True)
-    for (type,) in types:
+    for type in types:
         versions, recent_results = _get_recent_results(N_VERSIONS_TO_SHOW,
                 num_dff, type=type, ver__submitted=True)
 
@@ -65,9 +65,9 @@ def dff_view(request, name):
     dff = get_object_or_404(FifoTest, shortname=name)
     versions, recent_results = _get_recent_results(N_VERSIONS_TO_SHOW,
             10, dff=dff, ver__submitted=True)
-    types = {t[0]: {} for t in Result.objects.values_list('type')}
+    types = {t[0]: {} for t in Type.objects.values_list('type')}
     for res in recent_results:
-        types[res.type][res.ver] = res
+        types[res.type.type][res.ver] = res
     types_list = []
     for type, test_results in types.items():
         results = [test_results.get(v) for v in versions]

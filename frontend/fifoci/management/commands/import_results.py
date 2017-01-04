@@ -56,12 +56,18 @@ def import_result(type, ver, parent, zf, dff_short_name, result):
         return
 
     try:
-        r = Result.objects.get(dff=dff, ver=ver, type=type)
+        t = Type.objects.get(type=type)
+    except Type.DoesNotExist:
+        t = Type()
+        t.type = type
+
+    try:
+        r = Result.objects.get(dff=dff, ver=ver, type=t)
     except Result.DoesNotExist:
         r = Result()
         r.dff = dff
         r.ver = ver
-        r.type = type
+        r.type = t
 
     if result['failure']:
         r.hashes = ''
@@ -69,7 +75,7 @@ def import_result(type, ver, parent, zf, dff_short_name, result):
         r.hashes = ','.join(result['hashes'])
 
     try:
-        old_r = Result.objects.get(dff=dff, ver=parent, type=type)
+        old_r = Result.objects.get(dff=dff, ver=parent, type=t)
         r.has_change = old_r.hashes != r.hashes
         r.first_result = False
     except Result.DoesNotExist:
