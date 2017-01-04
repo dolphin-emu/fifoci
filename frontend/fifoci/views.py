@@ -15,35 +15,22 @@ import os.path
 
 N_VERSIONS_TO_SHOW = 35
 
-
-def _get_recent_results(n, res_per_vers, **cond):
-    should_display = Q(has_change=True) | Q(first_result=True)
-    recent_results = (Result.objects.select_related('ver')
-                                    .filter(should_display, **cond)
-                                    .order_by('-ver__ts')
-                                    [:n * res_per_vers])
-    versions_set = set()
-    versions = []
-    for res in recent_results:
-        if res.ver not in versions_set:
-            versions.append(res.ver)
-            versions_set.add(res.ver)
-
-    recent_results = (Result.objects.select_related('ver', 'dff')
-                                    .filter(ver__in=versions,
-                                            dff__active=True, **cond)
-                                    .order_by('-ver__ts'))
-    return versions[:n], recent_results
-
-
 def home(request):
     data = {'recent_results': []}
     types = Type.objects.order_by('type')
     num_dff = FifoTest.objects.count()
     active_dff = FifoTest.objects.filter(active=True)
     for type in types:
-        versions, recent_results = _get_recent_results(N_VERSIONS_TO_SHOW,
-                num_dff, type=type, ver__submitted=True)
+        should_display = Q(results__has_change=True) | Q(results__first_result=True)
+        versions = Version.objects.filter(
+                      should_display,
+                      submitted=True,
+                      results__type=type,
+                   ).distinct('ts','id').order_by('-ts')[:N_VERSIONS_TO_SHOW]
+        recent_results = (Result.objects.select_related('ver', 'dff')
+	                    .filter(ver__in=list(versions),
+	                            dff__active=True,
+	                            type=type))
 
         # For each FifoTest, get the list of all results, and insert Nones when
         # results are mising for a version.
@@ -63,8 +50,18 @@ def home(request):
 
 def dff_view(request, name):
     dff = get_object_or_404(FifoTest, shortname=name)
-    versions, recent_results = _get_recent_results(N_VERSIONS_TO_SHOW,
-            10, dff=dff, ver__submitted=True)
+
+    should_display = Q(results__has_change=True) | Q(results__first_result=True)
+    versions = Version.objects.filter(
+                  should_display,
+                  submitted=True,
+                  results__dff=dff,
+               ).distinct('ts','id').order_by('-ts')[:N_VERSIONS_TO_SHOW]
+    recent_results = (Result.objects.select_related('ver', 'dff', 'type')
+	                .filter(ver__in=list(versions),
+	                        dff__active=True,
+	                        dff=dff))
+
     types = {t[0]: {} for t in Type.objects.values_list('type')}
     for res in recent_results:
         types[res.type.type][res.ver] = res
@@ -82,10 +79,10 @@ def dff_view(request, name):
 
 
 def get_version_results(ver, **cond):
-    results = Result.objects.select_related('ver', 'dff').filter(
+    results = Result.objects.select_related('ver', 'dff', 'type').filter(
             ver=ver, **cond).order_by('type', 'dff__shortname')
     if ver.parent:
-        parent_results_qs = Result.objects.select_related('ver', 'dff').filter(
+        parent_results_qs = Result.objects.select_related('ver', 'dff', 'type').filter(
                 ver=ver.parent).order_by('type', 'dff__shortname')
         parent_results_dict = {}
         for res in parent_results_qs:
