@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
-from fifoci.models import FifoTest, Version, Result
+from fifoci.models import FifoTest, Version, Result, Type
 
 import os
 import os.path
@@ -15,35 +15,22 @@ import os.path
 
 N_VERSIONS_TO_SHOW = 35
 
-
-def _get_recent_results(n, res_per_vers, **cond):
-    should_display = Q(has_change=True) | Q(first_result=True)
-    recent_results = (Result.objects.select_related('ver')
-                                    .filter(should_display, **cond)
-                                    .order_by('-ver__ts')
-                                    [:n * res_per_vers])
-    versions_set = set()
-    versions = []
-    for res in recent_results:
-        if res.ver not in versions_set:
-            versions.append(res.ver)
-            versions_set.add(res.ver)
-
-    recent_results = (Result.objects.select_related('ver', 'dff')
-                                    .filter(ver__in=versions,
-                                            dff__active=True, **cond)
-                                    .order_by('-ver__ts'))
-    return versions[:n], recent_results
-
-
 def home(request):
     data = {'recent_results': []}
-    types = list(sorted(Result.objects.values_list('type').distinct()))
+    types = Type.objects.order_by('type')
     num_dff = FifoTest.objects.count()
     active_dff = FifoTest.objects.filter(active=True)
-    for (type,) in types:
-        versions, recent_results = _get_recent_results(N_VERSIONS_TO_SHOW,
-                num_dff, type=type, ver__submitted=True)
+    for type in types:
+        should_display = Q(results__has_change=True) | Q(results__first_result=True)
+        versions = Version.objects.filter(
+                      should_display,
+                      submitted=True,
+                      results__type=type,
+                   ).distinct('ts','id').order_by('-ts')[:N_VERSIONS_TO_SHOW]
+        recent_results = (Result.objects.select_related('ver', 'dff')
+	                    .filter(ver__in=list(versions),
+	                            dff__active=True,
+	                            type=type))
 
         # For each FifoTest, get the list of all results, and insert Nones when
         # results are mising for a version.
@@ -58,16 +45,26 @@ def home(request):
         fifo_tests_list.sort(key=lambda k: k[0].shortname)
 
         data['recent_results'].append((type, versions, fifo_tests_list))
-    return render(request, 'index.html', dictionary=data)
+    return render(request, 'index.html', context=data)
 
 
 def dff_view(request, name):
     dff = get_object_or_404(FifoTest, shortname=name)
-    versions, recent_results = _get_recent_results(N_VERSIONS_TO_SHOW,
-            10, dff=dff, ver__submitted=True)
-    types = {t[0]: {} for t in Result.objects.values_list('type')}
+
+    should_display = Q(results__has_change=True) | Q(results__first_result=True)
+    versions = Version.objects.filter(
+                  should_display,
+                  submitted=True,
+                  results__dff=dff,
+               ).distinct('ts','id').order_by('-ts')[:N_VERSIONS_TO_SHOW]
+    recent_results = (Result.objects.select_related('ver', 'dff', 'type')
+	                .filter(ver__in=list(versions),
+	                        dff__active=True,
+	                        dff=dff))
+
+    types = {t[0]: {} for t in Type.objects.values_list('type')}
     for res in recent_results:
-        types[res.type][res.ver] = res
+        types[res.type.type][res.ver] = res
     types_list = []
     for type, test_results in types.items():
         results = [test_results.get(v) for v in versions]
@@ -78,14 +75,14 @@ def dff_view(request, name):
     data = {'dff': dff,
             'versions': versions,
             'types_list': types_list}
-    return render(request, 'dff-view.html', dictionary=data)
+    return render(request, 'dff-view.html', context=data)
 
 
 def get_version_results(ver, **cond):
-    results = Result.objects.select_related('ver', 'dff').filter(
+    results = Result.objects.select_related('ver', 'dff', 'type').filter(
             ver=ver, **cond).order_by('type', 'dff__shortname')
     if ver.parent:
-        parent_results_qs = Result.objects.select_related('ver', 'dff').filter(
+        parent_results_qs = Result.objects.select_related('ver', 'dff', 'type').filter(
                 ver=ver.parent).order_by('type', 'dff__shortname')
         parent_results_dict = {}
         for res in parent_results_qs:
@@ -112,7 +109,7 @@ def version_view(request, hash):
         i += count
     data = {'ver': ver,
             'results': zip(results, rowspan, parent_results)}
-    return render(request, 'version-view.html', dictionary=data)
+    return render(request, 'version-view.html', context=data)
 
 
 def version_view_json(request, hash):
@@ -128,14 +125,14 @@ def version_view_json(request, hash):
 
 def result_view(request, id):
     res = get_object_or_404(Result, pk=id)
-    return render(request, 'result-view.html', dictionary={'result': res})
+    return render(request, 'result-view.html', context={'result': res})
 
 
 def compare_view(request, curr_id, old_id):
     current = get_object_or_404(Result, pk=curr_id)
     old = get_object_or_404(Result, pk=old_id)
     data = {'current': current, 'old': old}
-    return render(request, 'compare-view.html', dictionary=data)
+    return render(request, 'compare-view.html', context=data)
 
 
 def about_view(request):

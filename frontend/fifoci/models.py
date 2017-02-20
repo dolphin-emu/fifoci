@@ -36,12 +36,19 @@ class Version(models.Model):
         return '%s (%s)' % (self.name, self.hash[:8])
 
 
+class Type(models.Model):
+    type = models.CharField(max_length=64, unique=True)
+
+    def __str__(self):
+        return self.type
+
+
 class Result(models.Model):
     dff = models.ForeignKey(FifoTest)
     ver = models.ForeignKey(Version, related_name='results')
-    type = models.CharField(max_length=64, db_index=True)
-    has_change = models.BooleanField(default=False, db_index=True)
-    first_result = models.BooleanField(default=False, db_index=True)
+    type = models.ForeignKey(Type)
+    has_change = models.BooleanField(default=False)
+    first_result = models.BooleanField(default=False)
 
     # Format: "h1,h2,h3,...,hN"
     hashes = models.TextField()
