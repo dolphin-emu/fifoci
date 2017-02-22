@@ -4,7 +4,7 @@
 
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
-from fifoci.models import FifoTest, Result, Version
+from fifoci.models import FifoTest, Result, Version, Type
 
 import json
 import os.path
@@ -107,11 +107,13 @@ def import_result(type, ver, parent, zf, dff_short_name, result):
 
 
 class Command(BaseCommand):
-    args = '<zip_file zip_files...>'
     help = 'Imports some result zip files into the database.'
 
+    def add_arguments(self, parser):
+        parser.add_argument('zip_file', nargs='+', type=str)
+
     def handle(self, *args, **options):
-        for zip_file in args:
+        for zip_file in options['zip_file']:
             if not os.path.exists(zip_file):
                 raise CommandError('%r does not exist' % zip_file)
             with zipfile.ZipFile(zip_file) as zf:
