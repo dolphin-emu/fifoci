@@ -13,8 +13,6 @@ BASE=$(dirname $0)
 SCRIPTNAME=$(basename $0)
 TIMEOUT=2m
 
-LOCKFILE="/tmp/${SCRIPTNAME}.lock"
-
 if [ -z "$FIFOCI_NO_TIMEOUT" ]; then
     TIMEOUT_CMD="timeout -s 9 $TIMEOUT"
 else
@@ -40,43 +38,6 @@ DOLPHIN=$1; shift
 
 echo "FIFOCI Worker starting for $DOLPHIN"
 
-#Open lock file
-exec 200>$LOCKFILE
-
-#Lock lock file
-flock -x 200 || exit 1
-
-# Start a dummy X server on the first usable display (:0, :1, :2, ...).
-export DISPLAYNUM=0
-while [ -e /tmp/.X11-unix/X$DISPLAYNUM ]; do
-    DISPLAYNUM=$((DISPLAYNUM + 1))
-done
-export DISPLAY=:$DISPLAYNUM
-echo "Starting a headless Xorg server on $DISPLAY"
-if [ -f "$HOME/fifoci-xorg.conf" ]; then
-    XORG_CFG="$HOME/fifoci-xorg.conf"
-else
-    XORG_CFG="$BASE/xorg.conf"
-fi
-Xorg -noreset +extension GLX +extension RANDR +extension RENDER \
-    -config $XORG_CFG $DISPLAY &> >(show_logs Xorg) &
-XORG_PID=$!
-
-while ! [ -e "/tmp/.X11-unix/X$DISPLAYNUM" ]; do
-    echo "Waiting for the X11 server to be ready..."
-    sleep 0.1
-done
-
-#Unlock lock file
-flock -u 200
-
-#Close lock file
-exec 200>&-
-
-echo 'Ready to process FIFO logs \o/'
-
-XORG_CHILDREN_PIDS="$(ps --ppid $XORG_PID -o pid=)"
-
 while [ "$#" -ne 0 ]; do
     DFF=$(echo "$1" | cut -d : -f 1)
     OUT=$(echo "$1" | cut -d : -f 2)
@@ -94,8 +55,9 @@ while [ "$#" -ne 0 ]; do
 
     echo "Starting DolphinNoGui with a $TIMEOUT timeout"
 
+    EGL_PLATFORM=surfaceless \
     LD_PRELOAD=$LIBSEGFAULT SEGFAULT_SIGNALS="abrt segv" \
-      $TIMEOUT_CMD $DOLPHIN -e $DFF &> >(show_logs Dolphin)
+      $TIMEOUT_CMD $DOLPHIN -p headless -e $DFF &> >(show_logs Dolphin)
     if [ "$?" -ne 0 ]; then
         echo "FIFO log playback failed for $DFF"
         touch $OUT/failure
@@ -121,8 +83,4 @@ while [ "$#" -ne 0 ]; do
     shift
 done
 
-echo "Processing done, cleaning up"
-
-# Cleanup: kill Xorg, rm the temporary directory.
-kill $XORG_CHILDREN_PIDS $XORG_PID
-wait $XORG_PID
+echo "Processing done."
