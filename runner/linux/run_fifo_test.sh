@@ -58,7 +58,7 @@ if [ -f "$HOME/fifoci-xorg.conf" ]; then
 else
     XORG_CFG="$BASE/xorg.conf"
 fi
-sudo Xorg -noreset +extension GLX +extension RANDR +extension RENDER \
+Xorg -noreset +extension GLX +extension RANDR +extension RENDER \
     -config $XORG_CFG $DISPLAY &> >(show_logs Xorg) &
 XORG_PID=$!
 
@@ -124,5 +124,5 @@ done
 echo "Processing done, cleaning up"
 
 # Cleanup: kill Xorg, rm the temporary directory.
-sudo kill $XORG_CHILDREN_PIDS $XORG_PID
+kill $XORG_CHILDREN_PIDS $XORG_PID
 wait $XORG_PID
