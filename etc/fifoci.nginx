@@ -1,8 +1,10 @@
 server {
     listen 443 ssl;
-    server_name fifoci.dolphin-emu.org fifoci.dolphin-emu.net;
+    listen [::]:443 ssl;
 
-    access_log logs/fifoci.access.log main;
+    server_name fifo.ci;
+
+    access_log /etc/nginx/logs/fifoci.access.log main;
 
     # FifoCI admins need to upload large DFF files, up to 100MB. Put a
     # deliberately high limit here.
@@ -23,3 +25,15 @@ server {
         expires 30d;
     }
 }
+
+server {
+    listen 80;
+    listen [::]:80;
+    listen 443 ssl;
+    listen [::]:443 ssl;
+
+    server_name fifoci.dolphin-emu.org fifoci.dolphin-emu.net;
+
+    return 301 https://fifo.ci$request_uri;
+}
+
