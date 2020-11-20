@@ -64,9 +64,9 @@ while [ "$#" -ne 0 ]; do
     else
         echo "FIFO playback done, extracting frames to $OUT"
 
-        AVIFILE=$DUMPDIR/*.avi
+        AVIFILE=$(echo $DUMPDIR/*.avi)
         if [ -f "$AVIFILE" ]; then
-            ffmpeg -i $AVIFILE -f image2 $OUT/frame-%3d.png \
+            ffmpeg -i "$AVIFILE" -f image2 $OUT/frame-%3d.png \
                 &> >(show_logs ffmpeg)
         else
             # Assume SW renderer style of .png frame dumping.
