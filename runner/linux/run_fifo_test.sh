@@ -64,7 +64,7 @@ while [ "$#" -ne 0 ]; do
     else
         echo "FIFO playback done, extracting frames to $OUT"
 
-        AVIFILE=$DUMPDIR/framedump0.avi
+        AVIFILE=$DUMPDIR/*.avi
         if [ -f "$AVIFILE" ]; then
             ffmpeg -i $AVIFILE -f image2 $OUT/frame-%3d.png \
                 &> >(show_logs ffmpeg)
