@@ -86,8 +86,8 @@ def get_version_results(ver, **cond):
                 ver=ver.parent).order_by('type', 'dff__shortname')
         parent_results_dict = {}
         for res in parent_results_qs:
-            parent_results_dict[(res.type, res.dff.shortname)] = res
-        parent_results = [parent_results_dict.get((res.type,
+            parent_results_dict[(res.type.type, res.dff.shortname)] = res
+        parent_results = [parent_results_dict.get((res.type.type,
                                                    res.dff.shortname), None)
                           for res in results]
     else:
@@ -117,7 +117,7 @@ def version_view_json(request, hash):
     results, parent_results = get_version_results(ver, has_change=True)
     data = []
     for r, pr in zip(results, parent_results):
-        data.append({'type': r.type, 'dff': r.dff.shortname,
+        data.append({'type': r.type.type, 'dff': r.dff.shortname,
                      'failure': not bool(r.hashes),
                      'url': reverse('compare-view', args=[r.id, pr.id])})
     return JsonResponse(data, safe=False)
