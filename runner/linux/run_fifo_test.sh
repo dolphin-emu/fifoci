@@ -70,7 +70,7 @@ while [ "$#" -ne 0 ]; do
                 &> >(show_logs ffmpeg)
         else
             # Assume SW renderer style of .png frame dumping.
-            i=0
+            i=1
             for f in $(ls -rt $DUMPDIR/*.png); do
                 mv -v $f `printf $OUT/frame-%03d.png $i`
                 i=$((i + 1))
