@@ -69,7 +69,7 @@ while [ "$#" -ne 0 ]; do
             ffmpeg -i "$AVIFILE" -f image2 $OUT/frame-%3d.png \
                 &> >(show_logs ffmpeg)
         else
-            # Assume SW renderer style of .png frame dumping.
+            # Assume PNG frame dumping.
             i=1
             for f in $(ls -rt $DUMPDIR/*.png); do
                 mv -v $f `printf $OUT/frame-%03d.png $i`
