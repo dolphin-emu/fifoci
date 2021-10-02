@@ -19,15 +19,6 @@ else
     TIMEOUT_CMD=""
 fi
 
-LIBSEGFAULT=""
-for f in /lib/x86_64-linux-gnu/libSegFault.so /lib/libSegFault.so /lib64/libSegFault.so; do
-  if [ -e $f ]; then
-    LIBSEGFAULT=$f
-    break
-  fi
-done
-echo "Using libSegFault: $LIBSEGFAULT"
-
 show_logs() {
     sed "s/^/$1>>> /"
 }
@@ -56,7 +47,7 @@ while [ "$#" -ne 0 ]; do
     echo "Starting DolphinNoGui with a $TIMEOUT timeout"
 
     EGL_PLATFORM=surfaceless \
-    LD_PRELOAD=$LIBSEGFAULT SEGFAULT_SIGNALS="abrt segv" \
+    SEGFAULT_SIGNALS="abrt segv" \
       $TIMEOUT_CMD $DOLPHIN -p headless -e $DFF &> >(show_logs Dolphin)
     if [ "$?" -ne 0 ]; then
         echo "FIFO log playback failed for $DFF"
