@@ -3,11 +3,11 @@
 # Licensing information: see $REPO_ROOT/LICENSE
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from fifoci.models import FifoTest, Version, Result, Type
+from django.urls import reverse
 
 import os
 import os.path
