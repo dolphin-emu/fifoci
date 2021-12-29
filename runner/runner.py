@@ -141,6 +141,10 @@ def spawn_tests(args, targets):
         ret = os.system('%s/linux/run_fifo_test.sh %s %s %s %s'
                         % (base_path, backend, driver, args.dolphin,
                            target_descr))
+    elif system == 'osx':
+        ret = os.system('%s/macos/run_fifo_test.sh %s %s %s %s'
+                        % (base_path, backend, driver, args.dolphin,
+                           target_descr))
     elif system == 'win':
         ret = subprocess.call('powershell %s/windows/run_fifo_test.ps1 %s %s %s %s'
                         % (base_path, backend, driver, args.dolphin,
