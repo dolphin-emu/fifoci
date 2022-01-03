@@ -61,6 +61,7 @@ def import_result(type, ver, parent, zf, dff_short_name, result):
     except Type.DoesNotExist:
         t = Type()
         t.type = type
+        t.save()
 
     try:
         r = Result.objects.get(dff=dff, ver=ver, type=t)
