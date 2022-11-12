@@ -62,9 +62,14 @@ def recent_enough():
     b7916f965530b0369bf08ed6bc9ec3ef20f7cd2f fixes a WX assert error that
     causes freezes on Windows FifoCI (and is a close descendent of another
     commits that adds DumpFramesSilent to remove more interactivity).
+
+    f28e5607fec604f998994e5d65931707eafec841 adds the option to disable
+    mipmapping, which is required by the macOS config.
     """
-    return os.system('git merge-base --is-ancestor '
-                     'b7916f965530b0369bf08ed6bc9ec3ef20f7cd2f HEAD') == 0
+    required = 'b7916f965530b0369bf08ed6bc9ec3ef20f7cd2f'
+    if sys.platform == 'darwin':
+        required = 'f28e5607fec604f998994e5d65931707eafec841'
+    return os.system('git merge-base --is-ancestor ' + required + ' HEAD') == 0
 
 
 def find_parents(rev_hash):
