@@ -31,14 +31,14 @@ def get_or_create_ver(rev):
     creates a new one and fills up all the required information.
     """
     try:
-        obj = Version.objects.get(hash=rev['hash'])
+        obj = Version.objects.get(hash=rev["hash"])
     except Version.DoesNotExist:
         obj = Version()
-        obj.hash = rev['hash']
-        obj.name = rev['name']
-        obj.submitted = rev['submitted']
+        obj.hash = rev["hash"]
+        obj.name = rev["name"]
+        obj.submitted = rev["submitted"]
 
-        parent, parent_hash = find_first_parent(rev['parents'])
+        parent, parent_hash = find_first_parent(rev["parents"])
         obj.parent = parent
         obj.parent_hash = parent_hash
 
@@ -53,7 +53,7 @@ def import_result(type, ver, parent, zf, dff_short_name, result):
     try:
         dff = FifoTest.objects.get(shortname=dff_short_name)
     except FifoTest.DoesNotExist:
-        print('DFF %r does not exist, skipping.' % dff_short_name)
+        print("DFF %r does not exist, skipping." % dff_short_name)
         return
 
     try:
@@ -71,10 +71,10 @@ def import_result(type, ver, parent, zf, dff_short_name, result):
         r.ver = ver
         r.type = t
 
-    if result['failure']:
-        r.hashes = ''
+    if result["failure"]:
+        r.hashes = ""
     else:
-        r.hashes = ','.join(result['hashes'])
+        r.hashes = ",".join(result["hashes"])
 
     try:
         old_r = Result.objects.get(dff=dff, ver=parent, type=t)
@@ -84,22 +84,21 @@ def import_result(type, ver, parent, zf, dff_short_name, result):
         r.has_change = False
         r.first_result = True
 
-    base_path = os.path.join(settings.MEDIA_ROOT, 'results')
-    pngcrush = shutil.which('pngcrush') is not None
-    for hash in result['hashes']:
-        final_img_path = os.path.join(base_path, hash + '.png')
+    base_path = os.path.join(settings.MEDIA_ROOT, "results")
+    pngcrush = shutil.which("pngcrush") is not None
+    for hash in result["hashes"]:
+        final_img_path = os.path.join(base_path, hash + ".png")
         if os.path.exists(final_img_path):
             continue
 
         if pngcrush:
-            extracted_img_path = final_img_path + '.unopt'
+            extracted_img_path = final_img_path + ".unopt"
         else:
             extracted_img_path = final_img_path
-        zip_path = 'fifoci-result/%s.png' % hash
-        open(extracted_img_path, 'wb').write(zf.read(zip_path))
+        zip_path = "fifoci-result/%s.png" % hash
+        open(extracted_img_path, "wb").write(zf.read(zip_path))
         if pngcrush:
-            if subprocess.call(['pngcrush', extracted_img_path,
-                                            final_img_path]) == 0:
+            if subprocess.call(["pngcrush", extracted_img_path, final_img_path]) == 0:
                 os.unlink(extracted_img_path)
             else:
                 os.rename(extracted_img_path, final_img_path)
@@ -109,20 +108,19 @@ def import_result(type, ver, parent, zf, dff_short_name, result):
 
 
 class Command(BaseCommand):
-    help = 'Imports some result zip files into the database.'
+    help = "Imports some result zip files into the database."
 
     def add_arguments(self, parser):
-        parser.add_argument('zip_file', nargs='+', type=str)
+        parser.add_argument("zip_file", nargs="+", type=str)
 
     def handle(self, *args, **options):
-        for zip_file in options['zip_file']:
+        for zip_file in options["zip_file"]:
             if not os.path.exists(zip_file):
-                raise CommandError('%r does not exist' % zip_file)
+                raise CommandError("%r does not exist" % zip_file)
             with zipfile.ZipFile(zip_file) as zf:
-                meta = zf.read('fifoci-result/meta.json').decode('utf-8')
+                meta = zf.read("fifoci-result/meta.json").decode("utf-8")
                 meta = json.loads(meta)
 
-                ver, parent = get_or_create_ver(meta['rev'])
-                for dff_short_name, result in meta['results'].items():
-                    import_result(meta['type'], ver, parent, zf,
-                                  dff_short_name, result)
+                ver, parent = get_or_create_ver(meta["rev"])
+                for dff_short_name, result in meta["results"].items():
+                    import_result(meta["type"], ver, parent, zf, dff_short_name, result)

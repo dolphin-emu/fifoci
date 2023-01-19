@@ -66,10 +66,10 @@ def recent_enough():
     f28e5607fec604f998994e5d65931707eafec841 adds the option to disable
     mipmapping, which is required by the macOS config.
     """
-    required = 'b7916f965530b0369bf08ed6bc9ec3ef20f7cd2f'
-    if sys.platform == 'darwin':
-        required = 'f28e5607fec604f998994e5d65931707eafec841'
-    return os.system('git merge-base --is-ancestor ' + required + ' HEAD') == 0
+    required = "b7916f965530b0369bf08ed6bc9ec3ef20f7cd2f"
+    if sys.platform == "darwin":
+        required = "f28e5607fec604f998994e5d65931707eafec841"
+    return os.system("git merge-base --is-ancestor " + required + " HEAD") == 0
 
 
 def find_parents(rev_hash):
@@ -80,8 +80,8 @@ def find_parents(rev_hash):
     ref = rev_hash
     for i in range(50):
         ref += "^"
-        hash = subprocess.check_output('git rev-parse ' + ref, shell=True).strip()
-        out.append(hash.decode('ascii'))
+        hash = subprocess.check_output("git rev-parse " + ref, shell=True).strip()
+        out.append(hash.decode("ascii"))
     return out
 
 
@@ -89,9 +89,9 @@ def download_dff(url, path):
     """Downloads a missing DFF from the specified URL to a given FS path."""
     resp = requests.get(url, stream=True)
     if resp.status_code != 200:
-        print('DFF %s not found' % url)
+        print("DFF %s not found" % url)
         return False
-    with open(path, 'wb') as fp:
+    with open(path, "wb") as fp:
         for chunk in resp.iter_content(chunk_size=4096):
             if chunk:
                 fp.write(chunk)
@@ -103,18 +103,19 @@ def generate_targets_list(dff_dir, url_base):
     given spec URL. If the required input files are missing, they are
     downloaded from the URL given in the spec.
     """
-    url_base = url_base.rstrip('/')
+    url_base = url_base.rstrip("/")
     out = []
-    spec = requests.get(url_base + '/dff/').json()
+    spec = requests.get(url_base + "/dff/").json()
     for target in spec:
-        path = os.path.join(dff_dir, target['filename'])
+        path = os.path.join(dff_dir, target["filename"])
         success = True
         if not os.path.exists(path):
-            print('DFF %s does not exist, downloading...' % path)
-            success = download_dff(url_base + target['url'], path)
+            print("DFF %s does not exist, downloading..." % path)
+            success = download_dff(url_base + target["url"], path)
         if success:
-            out.append((target['shortname'], path,
-                        tempfile.mkdtemp(suffix='.fifoci-out')))
+            out.append(
+                (target["shortname"], path, tempfile.mkdtemp(suffix=".fifoci-out"))
+            )
     return out
 
 
@@ -122,7 +123,7 @@ def get_existing_images(url_base):
     """Downloads the list of images already present on the server to reduce
     upload footprint. Only new images will be present in the result zip.
     """
-    return requests.get(url_base.rstrip('/') + '/existing-images/').json()
+    return requests.get(url_base.rstrip("/") + "/existing-images/").json()
 
 
 def spawn_tests(args, targets):
@@ -130,35 +131,38 @@ def spawn_tests(args, targets):
     to a given path.
     """
     base_path = os.path.dirname(__file__)
-    backend, system, driver = args.type.split('-', 2)
+    backend, system, driver = args.type.split("-", 2)
 
     # HACK: Since we use : as field separator, C:\ paths on windows break.
     # Assume that we are only ever going to run fifoci on the system drive and
     # strip the drive.
     def strip_drive(p):
-        return p[2:] if p[1] == ':' else p
-    if system == 'win':
-        targets = [(t[0], strip_drive(t[1]), strip_drive(t[2]))
-                   for t in targets]
+        return p[2:] if p[1] == ":" else p
 
-    target_descr = ' '.join(':'.join(target[1:]) for target in targets)
-    if system == 'lin':
-        ret = os.system('%s/linux/run_fifo_test.sh %s %s %s %s'
-                        % (base_path, backend, driver, args.dolphin,
-                           target_descr))
-    elif system == 'osx':
-        ret = os.system('%s/macos/run_fifo_test.sh %s %s %s %s'
-                        % (base_path, backend, driver, args.dolphin,
-                           target_descr))
-    elif system == 'win':
-        ret = subprocess.call('powershell %s/windows/run_fifo_test.ps1 %s %s %s %s'
-                        % (base_path, backend, driver, args.dolphin,
-                           target_descr))
+    if system == "win":
+        targets = [(t[0], strip_drive(t[1]), strip_drive(t[2])) for t in targets]
+
+    target_descr = " ".join(":".join(target[1:]) for target in targets)
+    if system == "lin":
+        ret = os.system(
+            "%s/linux/run_fifo_test.sh %s %s %s %s"
+            % (base_path, backend, driver, args.dolphin, target_descr)
+        )
+    elif system == "osx":
+        ret = os.system(
+            "%s/macos/run_fifo_test.sh %s %s %s %s"
+            % (base_path, backend, driver, args.dolphin, target_descr)
+        )
+    elif system == "win":
+        ret = subprocess.call(
+            "powershell %s/windows/run_fifo_test.ps1 %s %s %s %s"
+            % (base_path, backend, driver, args.dolphin, target_descr)
+        )
     else:
-        raise RuntimeError('unsupported system: %r' % system)
+        raise RuntimeError("unsupported system: %r" % system)
 
     if ret:
-        raise RuntimeError('run_fifo_test.sh returned %d' % ret)
+        raise RuntimeError("run_fifo_test.sh returned %d" % ret)
 
 
 def compute_image_hash(fn):
@@ -166,7 +170,7 @@ def compute_image_hash(fn):
     image.
     """
     im = Image.open(fn)
-    data = im.convert('RGB').tobytes('raw', 'RGB')
+    data = im.convert("RGB").tobytes("raw", "RGB")
     return hashlib.sha1(data).hexdigest()
 
 
@@ -178,44 +182,45 @@ def generate_results_data(args, targets):
     if args.rev_base_hash != args.rev_hash:
         parents = [args.rev_base_hash] + parents
     meta = {
-        'type': args.type,
-        'rev': {
-            'parents': parents,
-            'hash': args.rev_hash,
-            'name': args.rev_name,
-            'submitted': args.rev_submitted.lower() in ['true', 'yes', '1'],
+        "type": args.type,
+        "rev": {
+            "parents": parents,
+            "hash": args.rev_hash,
+            "name": args.rev_name,
+            "submitted": args.rev_submitted.lower() in ["true", "yes", "1"],
         },
-        'results': {}
+        "results": {},
     }
-    zf = zipfile.ZipFile(args.output, 'w')
+    zf = zipfile.ZipFile(args.output, "w")
 
     already_existing = get_existing_images(args.url_base)
 
     for dff_short_name, dff_path, out_path in targets:
-        result = {'hashes': []}
-        meta['results'][dff_short_name] = result
-        if os.path.exists(os.path.join(out_path, 'failure')):
-            result['failure'] = True
+        result = {"hashes": []}
+        meta["results"][dff_short_name] = result
+        if os.path.exists(os.path.join(out_path, "failure")):
+            result["failure"] = True
         else:
-            result['failure'] = False
+            result["failure"] = False
             for i in range(1, 1001):
-                fn = os.path.join(out_path, 'frame-%03d.png' % i)
+                fn = os.path.join(out_path, "frame-%03d.png" % i)
                 if not os.path.exists(fn):
                     break
                 hash = compute_image_hash(fn)
 
                 # HACK: Currently D3D on Windows inserts a black frame as the
                 # first frame of all recordings.
-                if i == 1 and hash in ('f971f36357cc45414090cecece55a91ee19aab29',
-                                       '44bba96a45cf665df718f81ea48f867e174999da'):
+                if i == 1 and hash in (
+                    "f971f36357cc45414090cecece55a91ee19aab29",
+                    "44bba96a45cf665df718f81ea48f867e174999da",
+                ):
                     continue
 
-                result['hashes'].append(hash)
+                result["hashes"].append(hash)
                 if hash not in already_existing:
-                    zf.writestr('fifoci-result/%s.png' % hash,
-                                open(fn, 'rb').read())
+                    zf.writestr("fifoci-result/%s.png" % hash, open(fn, "rb").read())
 
-    zf.writestr('fifoci-result/meta.json', json.dumps(meta).encode('utf-8'))
+    zf.writestr("fifoci-result/meta.json", json.dumps(meta).encode("utf-8"))
     zf.close()
 
 
@@ -227,21 +232,22 @@ def remove_output_directories(targets):
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Run fifoCI tests on a given Dolphin build')
-    parser.add_argument('--type', required=True)
-    parser.add_argument('--dolphin', required=True)
-    parser.add_argument('--rev_base_hash', required=True)
-    parser.add_argument('--rev_hash', required=True)
-    parser.add_argument('--rev_name', required=True)
-    parser.add_argument('--rev_submitted', required=True)
-    parser.add_argument('--output', required=True)
-    parser.add_argument('--url_base', required=True)
-    parser.add_argument('--dff_dir', required=True)
+        description="Run fifoCI tests on a given Dolphin build"
+    )
+    parser.add_argument("--type", required=True)
+    parser.add_argument("--dolphin", required=True)
+    parser.add_argument("--rev_base_hash", required=True)
+    parser.add_argument("--rev_hash", required=True)
+    parser.add_argument("--rev_name", required=True)
+    parser.add_argument("--rev_submitted", required=True)
+    parser.add_argument("--output", required=True)
+    parser.add_argument("--url_base", required=True)
+    parser.add_argument("--dff_dir", required=True)
     args = parser.parse_args()
 
     if not recent_enough():
-        print('The requested version is lacking features required for fifoci.')
-        print('Exiting early without providing results.')
+        print("The requested version is lacking features required for fifoci.")
+        print("Exiting early without providing results.")
         sys.exit(1)
 
     targets = generate_targets_list(args.dff_dir, args.url_base)
@@ -251,5 +257,5 @@ def main():
     remove_output_directories(targets)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -8,6 +8,7 @@ import markdown as markdown_mod
 
 register = template.Library()
 
+
 @register.filter
 def markdown(text):
     return mark_safe(markdown_mod.markdown(text))

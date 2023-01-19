@@ -10,58 +10,109 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='FifoTest',
+            name="FifoTest",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('file', models.FileField(max_length=256, upload_to='dff/')),
-                ('name', models.CharField(max_length=128)),
-                ('shortname', models.CharField(db_index=True, max_length=32)),
-                ('active', models.BooleanField(db_index=True, default=True)),
-                ('description', models.TextField(blank=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("file", models.FileField(max_length=256, upload_to="dff/")),
+                ("name", models.CharField(max_length=128)),
+                ("shortname", models.CharField(db_index=True, max_length=32)),
+                ("active", models.BooleanField(db_index=True, default=True)),
+                ("description", models.TextField(blank=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Result',
+            name="Result",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('has_change', models.BooleanField(default=False)),
-                ('first_result', models.BooleanField(default=False)),
-                ('hashes', models.TextField()),
-                ('dff', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='frontend.FifoTest')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("has_change", models.BooleanField(default=False)),
+                ("first_result", models.BooleanField(default=False)),
+                ("hashes", models.TextField()),
+                (
+                    "dff",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="frontend.FifoTest",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Type',
+            name="Type",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('type', models.CharField(max_length=64, unique=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("type", models.CharField(max_length=64, unique=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Version',
+            name="Version",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('hash', models.CharField(db_index=True, max_length=40)),
-                ('name', models.CharField(db_index=True, max_length=64)),
-                ('parent_hash', models.CharField(max_length=40)),
-                ('submitted', models.BooleanField(db_index=True, default=False)),
-                ('ts', models.DateTimeField(auto_now_add=True, db_index=True)),
-                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='frontend.Version')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("hash", models.CharField(db_index=True, max_length=40)),
+                ("name", models.CharField(db_index=True, max_length=64)),
+                ("parent_hash", models.CharField(max_length=40)),
+                ("submitted", models.BooleanField(db_index=True, default=False)),
+                ("ts", models.DateTimeField(auto_now_add=True, db_index=True)),
+                (
+                    "parent",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="frontend.Version",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='result',
-            name='type',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='frontend.Type'),
+            model_name="result",
+            name="type",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="frontend.Type"
+            ),
         ),
         migrations.AddField(
-            model_name='result',
-            name='ver',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='results', to='frontend.Version'),
+            model_name="result",
+            name="ver",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="results",
+                to="frontend.Version",
+            ),
         ),
     ]

@@ -6,6 +6,7 @@ from django import template
 
 register = template.Library()
 
+
 @register.simple_tag
 def get_zipped_hashes(current, old):
     current = [] if current is None else current.hashes_list
