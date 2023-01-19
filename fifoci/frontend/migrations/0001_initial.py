@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
                 ('has_change', models.BooleanField(default=False)),
                 ('first_result', models.BooleanField(default=False)),
                 ('hashes', models.TextField()),
-                ('dff', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='fifoci.FifoTest')),
+                ('dff', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='frontend.FifoTest')),
             ],
         ),
         migrations.CreateModel(
@@ -51,17 +51,17 @@ class Migration(migrations.Migration):
                 ('parent_hash', models.CharField(max_length=40)),
                 ('submitted', models.BooleanField(db_index=True, default=False)),
                 ('ts', models.DateTimeField(auto_now_add=True, db_index=True)),
-                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='fifoci.Version')),
+                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='frontend.Version')),
             ],
         ),
         migrations.AddField(
             model_name='result',
             name='type',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='fifoci.Type'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='frontend.Type'),
         ),
         migrations.AddField(
             model_name='result',
             name='ver',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='results', to='fifoci.Version'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='results', to='frontend.Version'),
         ),
     ]

@@ -2,7 +2,7 @@
 # Copyright (c) 2014 Pierre Bourdon <delroth@dolphin-emu.org>
 # Licensing information: see $REPO_ROOT/LICENSE
 
-from fifoci.models import Version, Result
+from .models import Version, Result
 
 
 def recent_changes(request):

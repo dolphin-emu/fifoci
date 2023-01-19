@@ -3,7 +3,7 @@
 # Licensing information: see $REPO_ROOT/LICENSE
 
 from django.core.management.base import BaseCommand, CommandError
-from fifoci.models import FifoTest, Result, Version
+from .models import FifoTest, Result, Version
 
 class Command(BaseCommand):
     help = 'Fixes bad data in the database.'

@@ -1,4 +1,4 @@
-from fifoci.settings.base import *
+from .base import *
 
 DATABASES = {
     'default': {

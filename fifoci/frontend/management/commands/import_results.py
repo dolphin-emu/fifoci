@@ -4,7 +4,7 @@
 
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
-from fifoci.models import FifoTest, Result, Version, Type
+from .models import FifoTest, Result, Version, Type
 
 import json
 import os

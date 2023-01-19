@@ -6,8 +6,9 @@ from django.conf import settings
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
-from fifoci.models import FifoTest, Version, Result, Type
 from django.urls import reverse
+
+from .models import FifoTest, Version, Result, Type
 
 import os
 import os.path

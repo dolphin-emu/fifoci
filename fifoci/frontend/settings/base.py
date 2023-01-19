@@ -42,7 +42,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'fifoci',
+    'fifoci.frontend',
 )
 
 MIDDLEWARE = (
@@ -68,15 +68,15 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
-                "fifoci.context_processors.recent_changes",
+                "fifoci.frontend.context_processors.recent_changes",
             ],
         },
     },
 ]
 
-ROOT_URLCONF = 'fifoci.urls'
+ROOT_URLCONF = 'fifoci.frontend.urls'
 
-WSGI_APPLICATION = 'fifoci.wsgi.application'
+WSGI_APPLICATION = 'fifoci.frontend.wsgi.application'
 
 
 # Database

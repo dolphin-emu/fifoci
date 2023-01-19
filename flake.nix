@@ -10,6 +10,13 @@
     overlay = nixpkgs.lib.composeManyExtensions [
       poetry2nix.overlay
       (final: prev: {
+        fifoci-frontend = prev.poetry2nix.mkPoetryApplication {
+          src = prev.poetry2nix.cleanPythonSources { src = ./.; };
+          projectDir = fifoci/frontend;
+
+          sourceRoot = "source/fifoci/frontend";
+        };
+
         fifoci-runner = prev.poetry2nix.mkPoetryApplication {
           src = prev.poetry2nix.cleanPythonSources { src = ./.; };
           projectDir = fifoci/runner;
@@ -25,11 +32,11 @@
         overlays = [ self.overlay ];
       };
     in rec {
-      packages = { inherit (pkgs) fifoci-runner; };
+      packages = { inherit (pkgs) fifoci-frontend fifoci-runner; };
       defaultPackage = pkgs.fifoci-runner;
 
       devShells.default = with pkgs; mkShell {
-        buildInputs = [ python3Packages.poetry ];
+        buildInputs = [ postgresql python3Packages.poetry ];
       };
     }
   ));
