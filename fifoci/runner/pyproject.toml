@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "fifoci-runner"
+version = "0.1.0"
+description = "FifoCI runner script, driving a Dolphin Emulator instance and collecting rendering results."
+authors = ["Pierre Bourdon <delroth@dolphin-emu.org>"]
+license = "BSD-2-Clause"
+packages = [{include = "fifoci/runner", from = "../.."}]
+
+[tool.poetry.scripts]
+fifoci-runner = "fifoci.runner.__main__:main"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Pillow = "^9.4.0"
+requests = "^2.28.2"
+
+[tool.poetry.group.dev.dependencies]
+black = "^22.12.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

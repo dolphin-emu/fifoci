@@ -225,7 +225,7 @@ def remove_output_directories(targets):
         shutil.rmtree(out_path)
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(
         description='Run fifoCI tests on a given Dolphin build')
     parser.add_argument('--type', required=True)
@@ -249,3 +249,7 @@ if __name__ == '__main__':
 
     generate_results_data(args, targets)
     remove_output_directories(targets)
+
+
+if __name__ == '__main__':
+    main()
