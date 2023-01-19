@@ -36,7 +36,7 @@
       defaultPackage = pkgs.fifoci-runner;
 
       devShells.default = with pkgs; mkShell {
-        buildInputs = [ postgresql python3Packages.poetry ];
+        buildInputs = [ poetry postgresql ];
       };
     }
   ));
