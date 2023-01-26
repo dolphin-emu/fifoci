@@ -41,3 +41,5 @@ DATABASES = {
         "USER": os.environ.get("POSTGRES_USER", "fifoci"),
     }
 }
+
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
