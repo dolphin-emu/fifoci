@@ -129,6 +129,8 @@ def version_view_json(request, hash):
     results, parent_results = get_version_results(ver, has_change=True)
     data = []
     for r, pr in zip(results, parent_results):
+        if pr is None:
+            continue
         data.append(
             {
                 "type": r.type.type,
@@ -167,6 +169,10 @@ def dffs_to_test(request):
 
 
 def existing_images(request):
-    img = os.listdir(os.path.join(settings.MEDIA_ROOT, "results"))
+    results_dir = os.path.join(settings.MEDIA_ROOT, "results")
+    if os.path.isdir(results_dir):
+        img = os.listdir(os.path.join(settings.MEDIA_ROOT, "results"))
+    else:
+        img = []
     hashes = [i[:-4] for i in img if i.endswith(".png")]
     return JsonResponse(hashes, safe=False)
