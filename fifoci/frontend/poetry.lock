@@ -103,7 +103,7 @@ bcrypt = ["bcrypt"]
 name = "django-debug-toolbar"
 version = "3.8.1"
 description = "A configurable set of panels that display various debug information about the current request/response."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -321,4 +321,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "dea4f9a57171ad70aeea6f243e36463ce1b081f654320b731ac3d581baadc5d5"
+content-hash = "8fa5b8916d3387193e5d1a6843f09de3275ce860f789e59dc1e225d6edde25aa"
