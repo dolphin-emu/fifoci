@@ -14,6 +14,7 @@ python = "^3.9"
 Markdown = "^3.4.1"
 Django = "^2.2"
 psycopg2 = "^2.9.5"
+gunicorn = "^20.1.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.12.0"
