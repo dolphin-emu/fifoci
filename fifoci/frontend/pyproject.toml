@@ -12,7 +12,7 @@ fifoci-frontend-manage = "fifoci.frontend.manage:main"
 [tool.poetry.dependencies]
 python = "^3.9"
 Markdown = "^3.4.1"
-Django = "^3.0"
+Django = "~4.1"
 psycopg2 = "^2.9.5"
 gunicorn = "^20.1.0"
 
