@@ -14,6 +14,9 @@ if "MEDIA_ROOT" in os.environ:
 if "ALLOWED_HOSTS" in os.environ:
     ALLOWED_HOSTS = os.environ["ALLOWED_HOSTS"].split(",")
 
+if "PNGCRUSH_CHD" in os.environ:
+    PNGCRUSH_CMD = os.environ["PNGCRUSH_CMD"]
+
 # Always log to stdout.
 LOGGING = {
     "version": 1,

@@ -85,7 +85,7 @@ def import_result(type, ver, parent, zf, dff_short_name, result):
         r.first_result = True
 
     base_path = os.path.join(settings.MEDIA_ROOT, "results")
-    pngcrush = shutil.which("pngcrush") is not None
+    pngcrush = settings.PNGCRUSH_CMD
     for hash in result["hashes"]:
         final_img_path = os.path.join(base_path, hash + ".png")
         if os.path.exists(final_img_path):
@@ -98,7 +98,7 @@ def import_result(type, ver, parent, zf, dff_short_name, result):
         zip_path = "fifoci-result/%s.png" % hash
         open(extracted_img_path, "wb").write(zf.read(zip_path))
         if pngcrush:
-            if subprocess.call(["pngcrush", extracted_img_path, final_img_path]) == 0:
+            if subprocess.call([pngcrush, extracted_img_path, final_img_path]) == 0:
                 os.unlink(extracted_img_path)
             else:
                 os.rename(extracted_img_path, final_img_path)

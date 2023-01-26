@@ -14,6 +14,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import shutil
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
@@ -113,3 +114,5 @@ STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesSto
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 FILE_UPLOAD_PERMISSIONS = 0o644
+
+PNGCRUSH_CMD = shutil.which("pngcrush")
