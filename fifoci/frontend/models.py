@@ -21,7 +21,7 @@ class FifoTest(models.Model):
 
 
 class Version(models.Model):
-    hash = models.CharField(max_length=40, db_index=True)
+    hash = models.CharField(max_length=40, unique=True, db_index=True)
     name = models.CharField(max_length=64, db_index=True)
     parent = models.ForeignKey(
         "self", null=True, blank=True, db_index=True, on_delete=models.CASCADE
