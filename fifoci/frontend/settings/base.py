@@ -29,10 +29,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 SECRET_KEY = os.urandom(32)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-TEMPLATE_DEBUG = False
+DEBUG = True
+TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ["fifo.ci"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+INTERNAL_IPS = ["127.0.0.1"]
 
 
 # Application definition
@@ -44,6 +45,7 @@ INSTALLED_APPS = (
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "debug_toolbar",
     "fifoci.frontend",
 )
 
@@ -54,6 +56,7 @@ MIDDLEWARE = (
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 )
 
 TEMPLATES = [
@@ -87,9 +90,8 @@ WSGI_APPLICATION = "fifoci.frontend.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "fifoci",
-        "USER": "fifoci",
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "db.sqlite3",
     }
 }
 

@@ -2,6 +2,8 @@ import os
 
 from .base import *
 
+DEBUG = TEMPLATE_DEBUG = False
+
 if "SECRET_KEY_FILE" in os.environ:
     SECRET_KEY = open(os.environ["SECRET_KEY_FILE"]).read()
 
