@@ -1,7 +1,7 @@
-from django.test import Client, TestCase
+from django.test import TestCase
 
 
-class StaticTestCase(TestCase):
+class Smoke(TestCase):
     def test_home(self):
         resp = self.client.get("/")
         self.assertEqual(resp.status_code, 200)
