@@ -11,6 +11,9 @@ if "STATIC_ROOT" in os.environ:
 if "MEDIA_ROOT" in os.environ:
     MEDIA_ROOT = os.environ["MEDIA_ROOT"]
 
+if "ALLOWED_HOSTS" in os.environ:
+    ALLOWED_HOSTS = os.environ["ALLOWED_HOSTS"].split(",")
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
