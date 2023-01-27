@@ -15,6 +15,10 @@
           projectDir = fifoci/frontend;
 
           sourceRoot = "source/fifoci/frontend";
+
+          overrides = prev.poetry2nix.defaultPoetryOverrides.extend (self: super: {
+            dj-inmemorystorage = super.dj-inmemorystorage.overridePythonAttrs (old: { buildInputs = (old.buildInputs or []) ++ [ super.setuptools ]; });
+          });
         };
 
         fifoci-runner = prev.poetry2nix.mkPoetryApplication {
