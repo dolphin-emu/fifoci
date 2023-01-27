@@ -46,10 +46,12 @@ class Type(models.Model):
 
 class Result(models.Model):
     dff = models.ForeignKey(FifoTest, on_delete=models.CASCADE)
-    ver = models.ForeignKey(Version, related_name="results", on_delete=models.CASCADE)
-    type = models.ForeignKey(Type, on_delete=models.CASCADE)
-    has_change = models.BooleanField(default=False)
-    first_result = models.BooleanField(default=False)
+    ver = models.ForeignKey(
+        Version, db_index=True, related_name="results", on_delete=models.CASCADE
+    )
+    type = models.ForeignKey(Type, db_index=True, on_delete=models.CASCADE)
+    has_change = models.BooleanField(default=False, db_index=True)
+    first_result = models.BooleanField(default=False, db_index=True)
 
     # Format: "h1,h2,h3,...,hN"
     hashes = models.TextField()
