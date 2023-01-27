@@ -7,3 +7,5 @@ class TestRunner(DiscoverRunner):
         super().setup_test_environment()
 
         settings.DEFAULT_FILE_STORAGE = "inmemorystorage.InMemoryStorage"
+        settings.MEDIA_ROOT = "/"
+        settings.PNGCRUSH_CMD = None
