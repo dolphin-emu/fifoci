@@ -276,7 +276,7 @@ def main():
 
     if args.import_api_key_file:
         api_key = open(args.import_api_key_file).read().strip()
-        upload_results(args.url_base, args.api_key, args.output)
+        upload_results(args.url_base, api_key, args.output)
 
 
 if __name__ == "__main__":
