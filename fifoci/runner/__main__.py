@@ -243,7 +243,10 @@ def upload_results(url_base, api_key, output_zip):
         for fn in zf.namelist():
             if fn.endswith(".png"):
                 files.append(("image", (fn.split("/")[-1], zf.read(fn))))
-    requests.post(url, headers=headers, files=files)
+
+    r = requests.post(url, headers=headers, files=files)
+    if r.status_code != 200:
+        raise RuntimeError(f"Error while uploading results: {r.text}")
 
 
 def main():
