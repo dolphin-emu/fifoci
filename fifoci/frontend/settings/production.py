@@ -7,6 +7,9 @@ DEBUG = TEMPLATE_DEBUG = False
 if "SECRET_KEY_FILE" in os.environ:
     SECRET_KEY = open(os.environ["SECRET_KEY_FILE"]).read()
 
+if "IMPORT_API_KEY_FILE" in os.environ:
+    IMPORT_API_KEY = open(os.environ["IMPORT_API_KEY_FILE"]).read()
+
 if "STATIC_ROOT" in os.environ:
     STATIC_ROOT = os.environ["STATIC_ROOT"]
 

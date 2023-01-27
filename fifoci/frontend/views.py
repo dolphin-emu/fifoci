@@ -4,12 +4,21 @@
 
 from django.conf import settings
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import (
+    HttpResponse,
+    HttpResponseBadRequest,
+    HttpResponseForbidden,
+    JsonResponse,
+)
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 
+from . import importer
 from .models import FifoTest, Version, Result, Type
 
+import json
 import os
 import os.path
 
@@ -176,3 +185,46 @@ def existing_images(request):
         img = []
     hashes = [i[:-4] for i in img if i.endswith(".png")]
     return JsonResponse(hashes, safe=False)
+
+
+@require_POST
+@csrf_exempt
+def import_result(request):
+    if "HTTP_AUTHORIZATION" not in request.META:
+        return HttpResponseForbidden("Missing 'Authorization' header")
+    parts = request.META["HTTP_AUTHORIZATION"].split(" ", 1)
+    if len(parts) < 2:
+        return HttpResponseForbidden("Invalid 'Authorization' header format")
+    if parts[0].lower() != "bearer":
+        return HttpResponseForbidden("Unknown 'Authorization' header type")
+    if parts[1] != settings.IMPORT_API_KEY:
+        return HttpResponseForbidden("Wrong bearer token")
+
+    if "meta" not in request.FILES:
+        return HttpResponseBadRequest("No 'meta' found in uploaded files")
+
+    try:
+        meta = json.load(request.FILES["meta"])
+    except json.JSONDecodeError as e:
+        return HttpResponseBadRequest(f"Could not parse meta JSON: {e}")
+
+    for key in ("type", "rev", "results"):
+        if key not in meta:
+            return HttpResponseBadRequest(f"{key!r} not present in meta JSON")
+
+    type, _ = Type.objects.get_or_create(type=meta["type"])
+    ver, parent = importer.get_or_create_ver(meta["rev"])
+
+    for dff_short_name, result in meta["results"].items():
+        try:
+            dff = FifoTest.objects.get(shortname=dff_short_name)
+        except FifoTest.DoesNotExist:
+            continue
+
+        images = {}
+        for f in request.FILES.getlist("image"):
+            images[f.name.removesuffix(".png")] = f
+
+        importer.import_result(dff, type, ver, parent, result, images)
+
+    return HttpResponse("OK")

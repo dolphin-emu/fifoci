@@ -28,6 +28,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 # application restart.
 SECRET_KEY = os.urandom(32)
 
+IMPORT_API_KEY = os.urandom(32)
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 TEMPLATE_DEBUG = True

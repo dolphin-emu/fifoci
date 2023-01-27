@@ -10,17 +10,11 @@ from django.urls import include, path, re_path
 from . import views
 
 urlpatterns = [
-    # Examples:
+    # HTML pages for human consumption.
     re_path(r"^$", views.home, name="home"),
-    re_path(r"^dff/$", views.dffs_to_test),
     re_path(r"^dff/(?P<name>[a-zA-Z0-9-]+)/$", views.dff_view, name="dff-view"),
     re_path(
         r"^version/(?P<hash>[0-9a-f]{40})/$", views.version_view, name="version-view"
-    ),
-    re_path(
-        r"^version/(?P<hash>[0-9a-f]{40})/json/$",
-        views.version_view_json,
-        name="version-view-json",
     ),
     re_path(r"^result/(?P<id>\d+)/$", views.result_view, name="result-view"),
     re_path(
@@ -29,8 +23,16 @@ urlpatterns = [
         name="compare-view",
     ),
     re_path(r"^about/$", views.about_view, name="about-view"),
-    re_path(r"^existing-images/$", views.existing_images),
     re_path(r"^admin/", admin.site.urls),
+    # API endpoints.
+    re_path(r"^dff/$", views.dffs_to_test),
+    re_path(
+        r"^version/(?P<hash>[0-9a-f]{40})/json/$",
+        views.version_view_json,
+        name="version-view-json",
+    ),
+    re_path(r"^result/import/$", views.import_result, name="import-result"),
+    re_path(r"^existing-images/$", views.existing_images),
 ]
 
 if settings.DEBUG:
