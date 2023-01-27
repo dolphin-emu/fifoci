@@ -84,6 +84,8 @@ ROOT_URLCONF = "fifoci.frontend.urls"
 
 WSGI_APPLICATION = "fifoci.frontend.wsgi.application"
 
+TEST_RUNNER = "fifoci.frontend.tests.runner.TestRunner"
+
 
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
