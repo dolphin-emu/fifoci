@@ -5,9 +5,10 @@
 # Licensing information: see $REPO_ROOT/LICENSE
 
 # Runs a system specific script to generate frame dumps, and exports the test
-# results to a Zip file that can then be imported back by the central system.
+# results either directly to the web service (via HTTP submission API) or to a
+# Zip file that can then be imported back by the central system.
 #
-# The Zip needs to contain the following files:
+# The Zip contains the following files:
 #  * fifoci-result/meta.json
 #  * fifoci-result/*.png
 #
@@ -230,6 +231,21 @@ def remove_output_directories(targets):
         shutil.rmtree(out_path)
 
 
+def upload_results(url_base, api_key, output_zip):
+    """Parses an output ZIP and uploads its contents to FifoCI via the HTTP
+    submission API. In theory, the ZIP intermediate would not be required, but
+    this way required the leat amount of refactoring."""
+    url = url_base.rstrip("/") + "/result/import/"
+    headers = {"Authorization": f"Bearer {api_key}"}
+    files = []
+    with zipfile.ZipFile(output_zip) as zf:
+        files.append(("meta", ("meta.json", zf.read("fifoci-result/meta.json"))))
+        for fn in zf.namelist():
+            if fn.endswith(".png"):
+                files.append(("image", (fn.split("/")[-1], zf.read(fn))))
+    requests.post(url, headers=headers, files=files)
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Run fifoCI tests on a given Dolphin build"
@@ -243,6 +259,8 @@ def main():
     parser.add_argument("--output", required=True)
     parser.add_argument("--url_base", required=True)
     parser.add_argument("--dff_dir", required=True)
+
+    parser.add_argument("--import_api_key_file")
     args = parser.parse_args()
 
     if not recent_enough():
@@ -255,6 +273,10 @@ def main():
 
     generate_results_data(args, targets)
     remove_output_directories(targets)
+
+    if args.import_api_key_file:
+        api_key = open(args.import_api_key_file).read().strip()
+        upload_results(args.url_base, args.api_key, args.output)
 
 
 if __name__ == "__main__":
