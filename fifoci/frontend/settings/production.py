@@ -18,6 +18,9 @@ if "MEDIA_ROOT" in os.environ:
 
 if "ALLOWED_HOSTS" in os.environ:
     ALLOWED_HOSTS = os.environ["ALLOWED_HOSTS"].split(",")
+    CSRF_TRUSTED_ORIGINS = [
+        "https://" + h for h in os.environ["ALLOWED_HOSTS"].split(",")
+    ]
 
 if "PNGCRUSH_CHD" in os.environ:
     PNGCRUSH_CMD = os.environ["PNGCRUSH_CMD"]
