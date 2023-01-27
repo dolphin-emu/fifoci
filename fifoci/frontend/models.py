@@ -9,7 +9,7 @@ from django.urls import reverse
 class FifoTest(models.Model):
     file = models.FileField(upload_to="dff/", max_length=256)
     name = models.CharField(max_length=128)
-    shortname = models.CharField(max_length=32, db_index=True)
+    shortname = models.CharField(max_length=32, unique=True, db_index=True)
     active = models.BooleanField(default=True, db_index=True)
     description = models.TextField(blank=True)
 
