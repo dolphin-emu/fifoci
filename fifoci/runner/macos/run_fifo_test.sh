@@ -44,6 +44,10 @@ while [ "$#" -ne 0 ]; do
     # Set LIBVULKAN_PATH to the MoltenVK dylib within the DolphinQt bundle.
     export LIBVULKAN_PATH=$BINARIES/Dolphin.app/Contents/Frameworks/libMoltenVK.dylib
 
+    # Enable all the Metal validation
+    export MTL_DEBUG_LAYER=1
+    export MTL_SHADER_VALIDATION=1
+
     DUMPDIR=$DOLPHIN_EMU_USERPATH/Dump/Frames
     mkdir -p $DUMPDIR
 
