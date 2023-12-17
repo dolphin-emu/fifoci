@@ -46,7 +46,7 @@ while [ "$#" -ne 0 ]; do
 
     # Enable all the Metal validation
     export MTL_DEBUG_LAYER=1
-    export MTL_SHADER_VALIDATION=1
+    # export MTL_SHADER_VALIDATION=1
 
     DUMPDIR=$DOLPHIN_EMU_USERPATH/Dump/Frames
     mkdir -p $DUMPDIR
