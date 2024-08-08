@@ -1,6 +1,6 @@
 # FifoCI - Dolphin's continuous integration for GPU emulation
 
-See https://fifoci.dolphin-emu.org/about/
+See https://fifo.ci/about/
 
 ## Technical information
 
