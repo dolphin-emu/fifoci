@@ -12,7 +12,7 @@ fifoci-runner = "fifoci.runner.__main__:main"
 [tool.poetry.dependencies]
 python = "^3.9"
 Pillow = "^9.4.0"
-requests = "^2.28.2"
+requests = "^2.31.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.12.0"
