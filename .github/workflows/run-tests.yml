@@ -9,31 +9,53 @@ permissions:
   contents: read
 
 jobs:
-  run-tests:
+  run-tests-runner:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: fifoci/runner
+
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
+    - name: Set up Python
+      uses: actions/setup-python@v5
       with:
-        python-version: "3.10"
+        python-version-file: "fifoci/runner/pyproject.toml"
 
-    - uses: snok/install-poetry@v1
-      with:
-        version: 1.3.0
-        virtualenvs-create: true
+    - name: Install uv
+      uses: astral-sh/setup-uv@v6
 
-    - name: Install dependencies
-      run: |
-        poetry -C fifoci/runner install --no-interaction --no-root
-        poetry -C fifoci/frontend install --no-interaction --no-root
+    - name: Sync dependencies
+      run: uv sync --locked --all-extras --dev
 
     - name: Check runner coding style
-      run: poetry run -C fifoci/runner black --check fifoci/runner
+      run: uv run black --check .
+
+  run-tests-frontend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: fifoci/frontend
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version-file: "fifoci/frontend/pyproject.toml"
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v6
+
+    - name: Sync dependencies
+      run: uv sync --locked --all-extras --dev
 
     - name: Check frontend coding style
-      run: poetry run -C fifoci/frontend black --check fifoci/frontend
+      run: uv run black --check .
 
     - name: Run frontend unit tests
-      run: poetry run -C fifoci/frontend fifoci-frontend-manage test --noinput
+      run: uv run fifoci-frontend-manage test --noinput
