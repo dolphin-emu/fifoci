@@ -3,7 +3,7 @@ name = "fifoci-frontend"
 version = "0.1.0"
 description = "The frontend for FifoCI, running at https://fifo.ci/ and hosting test cases and results."
 authors = [{ name = "Pierre Bourdon", email = "delroth@dolphin-emu.org" }]
-requires-python = ">=3.9,<3.10"
+requires-python = ">=3.10,<3.11"
 license = { text = "BSD-2-Clause" }
 
 dependencies = [

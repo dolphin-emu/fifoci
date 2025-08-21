@@ -3,7 +3,7 @@ name = "fifoci-runner"
 version = "0.1.0"
 description = "FifoCI runner script, driving a Dolphin Emulator instance and collecting rendering results."
 authors = [{ name = "Pierre Bourdon", email = "delroth@dolphin-emu.org" }]
-requires-python = ">=3.9,<3.10"
+requires-python = ">=3.10,<3.11"
 license = { text = "BSD-2-Clause" }
 
 dependencies = [
