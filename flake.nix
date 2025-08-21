@@ -40,7 +40,7 @@
       defaultPackage = pkgs.fifoci-runner;
 
       devShells.default = with pkgs; mkShell {
-        buildInputs = [ dolphin-emu-beta pngcrush poetry postgresql sqlite ];
+        buildInputs = [ dolphin-emu-beta pngcrush poetry postgresql sqlite uv ];
       };
     }
   ));
