@@ -1,26 +1,44 @@
-[tool.poetry]
+[project]
 name = "fifoci-frontend"
 version = "0.1.0"
 description = "The frontend for FifoCI, running at https://fifo.ci/ and hosting test cases and results."
-authors = ["Pierre Bourdon <delroth@dolphin-emu.org>"]
-license = "BSD-2-Clause"
-packages = [{include = "fifoci/frontend", from = "../.."}]
+authors = [{ name = "Pierre Bourdon", email = "delroth@dolphin-emu.org" }]
+requires-python = ">=3.9,<3.10"
+license = { text = "BSD-2-Clause" }
 
-[tool.poetry.scripts]
+dependencies = [
+  "Markdown>=3.4.1,<4",
+  "Django>=4.1,<4.2",
+  "psycopg2-binary>=2.9.5,<3",
+  "gunicorn>=20.1.0,<21",
+  "django-debug-toolbar>=3.8.1,<4",
+  "dj-inmemorystorage>=2.1.0,<3",
+]
+
+[project.scripts]
 fifoci-frontend-manage = "fifoci.frontend.manage:main"
 
-[tool.poetry.dependencies]
-python = "^3.9"
-Markdown = "^3.4.1"
-Django = "~4.1"
-psycopg2 = "^2.9.5"
-gunicorn = "^20.1.0"
-django-debug-toolbar = "^3.8.1"
-dj-inmemorystorage = "^2.1.0"
-
-[tool.poetry.group.dev.dependencies]
-black = "^22.12.0"
+[dependency-groups]
+dev = [
+    "black>=22.12.0,<23"
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = [
+  "fifoci.frontend",
+  "fifoci.frontend.settings",
+]
+
+[tool.setuptools.package-dir]
+"fifoci.frontend" = "."
+
+[tool.setuptools.package-data]
+"fifoci.frontend" = [
+  "templates/**/*",
+  "static/**/*",
+  "migrations/**/*",
+]
