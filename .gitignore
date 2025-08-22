@@ -4,3 +4,4 @@ __pycache__
 media
 dist
 result
+*.egg-info/

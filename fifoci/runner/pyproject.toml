@@ -1,22 +1,34 @@
-[tool.poetry]
+[project]
 name = "fifoci-runner"
 version = "0.1.0"
 description = "FifoCI runner script, driving a Dolphin Emulator instance and collecting rendering results."
-authors = ["Pierre Bourdon <delroth@dolphin-emu.org>"]
-license = "BSD-2-Clause"
-packages = [{include = "fifoci/runner", from = "../.."}]
+authors = [{ name = "Pierre Bourdon", email = "delroth@dolphin-emu.org" }]
+requires-python = ">=3.10,<3.11"
+license = { text = "BSD-2-Clause" }
 
-[tool.poetry.scripts]
+dependencies = [
+  "Pillow>=9.4.0,<10",
+  "requests>=2.28.2,<3",
+]
+
+[project.scripts]
 fifoci-runner = "fifoci.runner.__main__:main"
 
-[tool.poetry.dependencies]
-python = "^3.9"
-Pillow = "^9.4.0"
-requests = "^2.28.2"
-
-[tool.poetry.group.dev.dependencies]
-black = "^22.12.0"
+[dependency-groups]
+dev = [
+    "black>=22.12.0,<23"
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["fifoci.runner"]
+include-package-data = true
+
+[tool.setuptools.package-dir]
+"fifoci.runner" = "."
+
+[tool.setuptools.package-data]
+"fifoci.runner" = ["linux/**", "macos/**", "windows/**"]
