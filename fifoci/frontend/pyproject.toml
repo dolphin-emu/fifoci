@@ -39,6 +39,7 @@ packages = [
 [tool.setuptools.package-data]
 "fifoci.frontend" = [
   "templates/**/*",
+  "templatetags/**/*",
   "static/**/*",
   "migrations/**/*",
 ]
