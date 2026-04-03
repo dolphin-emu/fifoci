@@ -41,8 +41,15 @@ while [ "$#" -ne 0 ]; do
     echo "Using $DOLPHIN_EMU_USERPATH as our User directory"
     cp -r $BASE/Config-$BACKEND $DOLPHIN_EMU_USERPATH/Config
 
-    # Set LIBVULKAN_PATH to the MoltenVK dylib within the DolphinQt bundle.
-    export LIBVULKAN_PATH=$BINARIES/Dolphin.app/Contents/Frameworks/libMoltenVK.dylib
+    # Set LIBVULKAN_PATH to libvulkan if available, otherwise fall back to MoltenVK.
+    LIBVULKAN="$BINARIES/Dolphin.app/Contents/Frameworks/libvulkan.dylib"
+    MOLTENVK="$BINARIES/Dolphin.app/Contents/Frameworks/libMoltenVK.dylib"
+
+    if [ -f "$LIBVULKAN" ]; then
+        export LIBVULKAN_PATH="$LIBVULKAN"
+    else
+        export LIBVULKAN_PATH="$MOLTENVK"
+    fi
 
     # Enable all the Metal validation
     export MTL_DEBUG_LAYER=1
