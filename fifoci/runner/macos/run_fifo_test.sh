@@ -47,6 +47,7 @@ while [ "$#" -ne 0 ]; do
 
     if [ -f "$LIBVULKAN" ]; then
         export LIBVULKAN_PATH="$LIBVULKAN"
+        export VK_ICD_FILENAMES="$BINARIES/Dolphin.app/Contents/Resources/vulkan/icd.d/MoltenVK_icd.json"
     else
         export LIBVULKAN_PATH="$MOLTENVK"
     fi
