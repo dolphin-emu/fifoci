@@ -54,19 +54,6 @@ wheels = [
 ]
 
 [[package]]
-name = "dj-inmemorystorage"
-version = "2.1.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "django" },
-    { name = "six" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/bb/5b/89366ae96a0213437fd40b2e76791e8adcf790eda597a879bd2595bc41a5/dj-inmemorystorage-2.1.0.tar.gz", hash = "sha256:1771801613414262803a1a1e97dafd2b7a563e78fbcbfa2b6f841c9d8e7b872a", size = 6963, upload-time = "2020-03-30T17:49:12.045Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/6c/9c/f4246ff1b9f46940a4ade01c9563410e22b032fafc8115a560907c8662b0/dj_inmemorystorage-2.1.0-py2.py3-none-any.whl", hash = "sha256:81aa007a7cdb1899b3cd92404f656c82cd690a831b8698a43045f859d7276945", size = 6131, upload-time = "2020-03-30T17:49:10.624Z" },
-]
-
-[[package]]
 name = "django"
 version = "4.2.30"
 source = { registry = "https://pypi.org/simple" }
@@ -98,7 +85,6 @@ name = "fifoci-frontend"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "dj-inmemorystorage" },
     { name = "django" },
     { name = "django-debug-toolbar" },
     { name = "gunicorn" },
@@ -113,7 +99,6 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "dj-inmemorystorage", specifier = ">=2.1.0,<3" },
     { name = "django", specifier = ">=4.2,<5" },
     { name = "django-debug-toolbar", specifier = ">=3.8.1,<4" },
     { name = "gunicorn", specifier = ">=20.1.0,<21" },
@@ -199,15 +184,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/18/5d/3bf57dcd21979b887f014ea83c24ae194cfcd12b9e0fda66b957c69d1fca/setuptools-80.9.0.tar.gz", hash = "sha256:f36b47402ecde768dbfafc46e8e4207b4360c654f1f3bb84475f0a28628fb19c", size = 1319958, upload-time = "2025-05-27T00:56:51.443Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a3/dc/17031897dae0efacfea57dfd3a82fdd2a2aeb58e0ff71b77b87e44edc772/setuptools-80.9.0-py3-none-any.whl", hash = "sha256:062d34222ad13e0cc312a4c02d73f059e86a4acbfbdea8f8f76b28c99f306922", size = 1201486, upload-time = "2025-05-27T00:56:49.664Z" },
-]
-
-[[package]]
-name = "six"
-version = "1.17.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/94/e7/b2c673351809dca68a0e064b6af791aa332cf192da575fd474ed7d6f16a2/six-1.17.0.tar.gz", hash = "sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81", size = 34031, upload-time = "2024-12-04T17:35:28.174Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl", hash = "sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274", size = 11050, upload-time = "2024-12-04T17:35:26.475Z" },
 ]
 
 [[package]]
