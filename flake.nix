@@ -31,7 +31,7 @@
             overlay = workspace.mkPyprojectOverlay {
               sourcePreference = "wheel";
             };
-            python = pkgs.python310;
+            python = pkgs.python313;
             pythonSet =
               (pkgs.callPackage pyproject-nix.build.packages { inherit python; })
               .overrideScope (pkgs.lib.composeManyExtensions [
