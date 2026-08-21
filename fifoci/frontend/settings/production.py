@@ -48,6 +48,6 @@ DATABASES = {
     }
 }
 
-STORAGES["staticfiles"]["BACKEND"] = (
-    "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
-)
+STORAGES["staticfiles"][
+    "BACKEND"
+] = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
