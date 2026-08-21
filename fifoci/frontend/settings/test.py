@@ -5,8 +5,6 @@ TEMPLATE_DEBUG = True
 
 SECRET_KEY = "foo"
 
-INSTALLED_APPS = INSTALLED_APPS + ("debug_toolbar",)
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
