@@ -22,7 +22,6 @@ import json
 import os
 import os.path
 
-
 N_VERSIONS_TO_SHOW = 35
 
 

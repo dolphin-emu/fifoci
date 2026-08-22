@@ -2,7 +2,7 @@
   description = "Continuous integration service running Dolphin FIFO logs to find graphics rendering regressions.";
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
 
   inputs.uv2nix.url = "github:pyproject-nix/uv2nix";
   inputs.uv2nix.inputs.nixpkgs.follows = "nixpkgs";
@@ -31,7 +31,7 @@
             overlay = workspace.mkPyprojectOverlay {
               sourcePreference = "wheel";
             };
-            python = pkgs.python310;
+            python = pkgs.python313;
             pythonSet =
               (pkgs.callPackage pyproject-nix.build.packages { inherit python; })
               .overrideScope (pkgs.lib.composeManyExtensions [

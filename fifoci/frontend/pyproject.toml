@@ -3,16 +3,15 @@ name = "fifoci-frontend"
 version = "0.1.0"
 description = "The frontend for FifoCI, running at https://fifo.ci/ and hosting test cases and results."
 authors = [{ name = "Pierre Bourdon", email = "delroth@dolphin-emu.org" }]
-requires-python = ">=3.10,<3.11"
+requires-python = ">=3.13,<3.14"
 license = { text = "BSD-2-Clause" }
 
 dependencies = [
-  "Markdown>=3.4.1,<4",
-  "Django>=4.1,<4.2",
-  "psycopg2-binary>=2.9.5,<3",
-  "gunicorn>=20.1.0,<21",
-  "django-debug-toolbar>=3.8.1,<4",
-  "dj-inmemorystorage>=2.1.0,<3",
+  "Markdown>=3.10.3,<4",
+  "Django>=5.2,<6",
+  "psycopg2-binary>=2.9.12,<3",
+  "gunicorn>=26.1.0,<27",
+  "django-debug-toolbar>=6.3.0,<7",
 ]
 
 [project.scripts]
@@ -20,7 +19,7 @@ fifoci-frontend-manage = "fifoci.frontend.manage:main"
 
 [dependency-groups]
 dev = [
-    "black>=22.12.0,<23"
+    "black>=26.5.1,<27"
 ]
 
 [build-system]
